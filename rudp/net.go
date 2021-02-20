@@ -3,11 +3,10 @@ package rudp
 import (
 	"errors"
 	"net"
-	"strings"
 )
 
-// TODO: Use net.ErrClosed when Go 1.16 is released.
-var ErrClosed = errors.New("use of closed peer")
+// ErrClosed is deprecated, use net.ErrClosed instead.
+var ErrClosed = net.ErrClosed
 
 /*
 netPkt.Data format (big endian):
@@ -27,9 +26,7 @@ func readNetPkts(conn net.PacketConn, pkts chan<- netPkt, errs chan<- error) {
 		buf := make([]byte, MaxNetPktSize)
 		n, addr, err := conn.ReadFrom(buf)
 		if err != nil {
-			// TODO: Change to this when Go 1.16 is released:
-			// if errors.Is(err, net.ErrClosed) {
-			if strings.Contains(err.Error(), "use of closed network connection") {
+			if errors.Is(err, net.ErrClosed) {
 				break
 			}
 

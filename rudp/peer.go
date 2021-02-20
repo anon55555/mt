@@ -82,7 +82,7 @@ func (p *Peer) TimedOut() bool {
 }
 
 // Recv recieves a packet from the Peer.
-// You should keep calling this until it returns ErrClosed
+// You should keep calling this until it returns net.ErrClosed
 // so it doesn't leak a goroutine.
 func (p *Peer) Recv() (Pkt, error) {
 	select {
@@ -92,7 +92,7 @@ func (p *Peer) Recv() (Pkt, error) {
 			case err := <-p.errs:
 				return Pkt{}, err
 			default:
-				return Pkt{}, ErrClosed
+				return Pkt{}, net.ErrClosed
 			}
 		}
 		return pkt, nil
@@ -108,7 +108,7 @@ func (p *Peer) Close() error {
 
 	select {
 	case <-p.Disco():
-		return ErrClosed
+		return net.ErrClosed
 	default:
 	}
 

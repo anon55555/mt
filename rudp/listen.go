@@ -52,7 +52,7 @@ func Listen(conn net.PacketConn) *Listener {
 }
 
 // Accept waits for and returns a connecting Peer.
-// You should keep calling this until it returns ErrClosed
+// You should keep calling this until it returns net.ErrClosed
 // so it doesn't leak a goroutine.
 func (l *Listener) Accept() (*Peer, error) {
 	select {
@@ -62,7 +62,7 @@ func (l *Listener) Accept() (*Peer, error) {
 			case err := <-l.errs:
 				return nil, err
 			default:
-				return nil, ErrClosed
+				return nil, net.ErrClosed
 			}
 		}
 		close(clt.accepted)

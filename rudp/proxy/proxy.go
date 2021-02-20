@@ -15,7 +15,7 @@ import (
 	"net"
 	"os"
 
-	"github.com/anon55555/mt/rudp"
+	"mt/rudp"
 )
 
 func main() {
@@ -61,7 +61,7 @@ func proxy(src, dest *rudp.Peer) {
 	for {
 		pkt, err := src.Recv()
 		if err != nil {
-			if err == rudp.ErrClosed {
+			if err == net.ErrClosed {
 				msg := src.Addr().String() + " disconnected"
 				if src.TimedOut() {
 					msg += " (timed out)"

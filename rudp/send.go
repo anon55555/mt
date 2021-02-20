@@ -126,7 +126,7 @@ func (p *Peer) sendRaw(pkt rawPkt) (ack <-chan struct{}, err error) {
 
 	select {
 	case <-p.Disco():
-		return nil, ErrClosed
+		return nil, net.ErrClosed
 	default:
 	}
 
@@ -201,12 +201,9 @@ func (p *Peer) sendRel(pkt rawPkt) (ack <-chan struct{}, err error) {
 	}
 
 	go func() {
-		resend := time.NewTicker(500 * time.Millisecond)
-		defer resend.Stop()
-
 		for {
 			select {
-			case <-resend.C:
+			case <-time.After(500 * time.Millisecond):
 				if _, err := p.sendRaw(relpkt); err != nil {
 					p.errs <- fmt.Errorf("failed to re-send timed out reliable seqnum: %d: %w", sn, err)
 				}

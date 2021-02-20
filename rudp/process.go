@@ -2,7 +2,6 @@ package rudp
 
 import (
 	"encoding/binary"
-	"encoding/hex"
 	"errors"
 	"fmt"
 	"io"
@@ -16,9 +15,7 @@ type PktError struct {
 }
 
 func (e PktError) Error() string {
-	return "error processing " + e.Type + " pkt: " +
-		hex.EncodeToString(e.Data) + ": " +
-		e.Err.Error()
+	return fmt.Sprintf("error processing %s pkt: %x: %v", e.Type, e.Data, e.Err)
 }
 
 func (e PktError) Unwrap() error { return e.Err }
@@ -38,7 +35,7 @@ func (p *Peer) processNetPkts(pkts <-chan netPkt) {
 type TrailingDataError []byte
 
 func (e TrailingDataError) Error() string {
-	return "trailing data: " + hex.EncodeToString([]byte(e))
+	return fmt.Sprintf("trailing data: %x", []byte(e))
 }
 
 func (p *Peer) processNetPkt(pkt netPkt) (err error) {
