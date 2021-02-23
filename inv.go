@@ -6,15 +6,6 @@ import (
 	"reflect"
 )
 
-type sentinal struct {
-	err error
-}
-
-func (s *sentinal) ret(err error) {
-	s.err = err
-	panic(s)
-}
-
 type Inv []NamedInvList
 
 type NamedInvList struct {
@@ -46,12 +37,7 @@ func (i Inv) Serialize(w io.Writer) error {
 
 func (i *Inv) Deserialize(r io.Reader) (err error) {
 	s := new(sentinal)
-	defer func() {
-		r := recover()
-		if r, ok := r.(sentinal); ok {
-			err = r.err
-		}
-	}()
+	defer s.recover(&err)
 
 	old := *i
 	*i = nil
@@ -119,12 +105,7 @@ func (l InvList) Serialize(w io.Writer) error {
 
 func (i *InvList) Deserialize(r io.Reader) (err error) {
 	s := new(sentinal)
-	defer func() {
-		r := recover()
-		if r, ok := r.(sentinal); ok {
-			err = r.err
-		}
-	}()
+	defer s.recover(&err)
 
 	if _, err := fmt.Fscanf(r, "Width %d\n", &i.Width); err != nil {
 		s.ret(err)
@@ -189,4 +170,21 @@ func readCmdLn(r io.Reader, cmds map[string]interface{}) error {
 	reflect.ValueOf(f).Call(args)
 
 	return nil
+}
+
+type sentinal struct {
+	err error
+}
+
+func (s *sentinal) ret(err error) {
+	s.err = err
+	panic(s)
+}
+
+func (s *sentinal) recover(p *error) {
+	if r := recover(); r == s {
+		*p = s.err
+	} else {
+		panic(r)
+	}
 }
