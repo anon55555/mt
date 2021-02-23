@@ -160,7 +160,9 @@ func scanOptJSONStr(state fmt.ScanState) (string, error) {
 		return scanJSONStr(state)
 	}
 
-	token, err := state.Token(false, func(r rune) bool { return r != ' ' })
+	token, err := state.Token(false, func(r rune) bool {
+		return r != ' ' && r != '\n'
+	})
 	return string(token), err
 }
 
