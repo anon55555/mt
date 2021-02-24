@@ -57,6 +57,23 @@ func (m ItemMeta) Field(name string) (s string, ok bool) {
 	return "", false
 }
 
+func (m *ItemMeta) SetField(name, value string) {
+	if *m == "" {
+		*m = ItemMeta(1)
+	}
+
+	v, _ := m.Field(name)
+
+	search := string(3) + name + string(2) + v + string(3)
+	newv := name + string(2) + value + string(3)
+
+	if i := strings.Index(string(*m), search); i != -1 {
+		*m = ItemMeta(strings.Replace(string(*m), string((*m)[i:i+len(search)]), newv, 1))
+	} else {
+		*m = *m + ItemMeta(newv)
+	}
+}
+
 func (s Stack) String() string {
 	if s.Count == 0 {
 		return ""
