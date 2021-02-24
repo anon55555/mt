@@ -22,41 +22,6 @@ type Item struct {
 	ItemMeta
 }
 
-type ItemMeta string
-
-func (m ItemMeta) Field(name string) (s string, ok bool) {
-	if len(m) > 0 && m[0] == 1 {
-		m = m[1:]
-		eat := func(stop byte) string {
-			for i := 0; i < len(m); i++ {
-				if m[i] == stop {
-					defer func() {
-						m = m[i+1:]
-					}()
-					return string(m[:i])
-				}
-			}
-			defer func() {
-				m = ""
-			}()
-			return string(m)
-		}
-		for len(m) > 0 {
-			if eat(2) == name {
-				s = eat(3)
-				ok = true
-			}
-		}
-		return
-	}
-
-	if name == "" {
-		return string(m), true
-	}
-
-	return "", false
-}
-
 func (s Stack) String() string {
 	if s.Count == 0 {
 		return ""
