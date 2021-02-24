@@ -45,6 +45,8 @@ func (m ItemMeta) Field(name string) (s string, ok bool) {
 			if eat(2) == name {
 				s = eat(3)
 				ok = true
+			} else {
+				eat(3)
 			}
 		}
 		return
@@ -62,12 +64,21 @@ func (m *ItemMeta) SetField(name, value string) {
 		*m = ItemMeta(1)
 	}
 
+	sanitize := func(s *string) {
+		for i := 1; i <= 3; i++ {
+			*s = strings.ReplaceAll(*s, string(i), "")
+		}
+	}
+
+	sanitize(&name)
+	sanitize(&value)
+
 	v, _ := m.Field(name)
 
-	search := string(3) + name + string(2) + v + string(3)
+	search := name + string(2) + v + string(3)
 	newv := name + string(2) + value + string(3)
 
-	if i := strings.Index(string(*m), search); i != -1 {
+	if i := strings.Index(string(*m), search); i != -1 && ((*m)[i-1] == 1 || (*m)[i-1] == 3) {
 		*m = ItemMeta(strings.Replace(string(*m), string((*m)[i:i+len(search)]), newv, 1))
 	} else {
 		*m = *m + ItemMeta(newv)
