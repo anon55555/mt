@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"net"
 )
 
 // A PktError is an error that occured while processing a packet.
@@ -140,9 +141,7 @@ func (p *Peer) processRawPkt(pkt rawPkt) (err error) {
 		case ctlDisco:
 			defer errWrap("disco: %w")
 
-			if err := p.Close(); err != nil {
-				return fmt.Errorf("can't close: %w", err)
-			}
+			p.Close()
 
 			if len(pkt.Data) > 1+1 {
 				return TrailingDataError(pkt.Data[1+1:])
@@ -226,6 +225,9 @@ func (p *Peer) processRawPkt(pkt rawPkt) (err error) {
 			Unrel: true,
 		}
 		if _, err := p.sendRaw(ack); err != nil {
+			if errors.Is(err, net.ErrClosed) {
+				return nil
+			}
 			return fmt.Errorf("can't ack %d: %w", sn, err)
 		}
 

@@ -10,12 +10,13 @@ and listen:port is the address to listen on.
 package main
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"net"
 	"os"
 
-	"mt/rudp"
+	"github.com/anon55555/mt/rudp"
 )
 
 func main() {
@@ -61,7 +62,7 @@ func proxy(src, dest *rudp.Peer) {
 	for {
 		pkt, err := src.Recv()
 		if err != nil {
-			if err == net.ErrClosed {
+			if errors.Is(err, net.ErrClosed) {
 				msg := src.Addr().String() + " disconnected"
 				if src.TimedOut() {
 					msg += " (timed out)"

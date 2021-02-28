@@ -115,6 +115,9 @@ func (l *Listener) processNetPkt(pkt netPkt) error {
 		data[1] = uint8(ctlSetPeerID)
 		binary.BigEndian.PutUint16(data[2:4], uint16(clt.ID()))
 		if _, err := clt.sendRaw(rawPkt{Data: data}); err != nil {
+			if errors.Is(err, net.ErrClosed) {
+				return nil
+			}
 			return fmt.Errorf("can't set client peer id: %w", err)
 		}
 
@@ -145,7 +148,8 @@ func (l *Listener) processNetPkt(pkt netPkt) error {
 		select {
 		case clt.pkts <- pkt:
 		default:
-			return fmt.Errorf("ignoring net pkt from %s because buf is full", addrstr)
+			// It's OK to drop packets if the buffer is full
+			// because MT RUDP can cope with packet loss.
 		}
 	}
 

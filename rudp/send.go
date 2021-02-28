@@ -205,6 +205,9 @@ func (p *Peer) sendRel(pkt rawPkt) (ack <-chan struct{}, err error) {
 			select {
 			case <-time.After(500 * time.Millisecond):
 				if _, err := p.sendRaw(relpkt); err != nil {
+					if errors.Is(err, net.ErrClosed) {
+						return
+					}
 					p.errs <- fmt.Errorf("failed to re-send timed out reliable seqnum: %d: %w", sn, err)
 				}
 			case <-ack:

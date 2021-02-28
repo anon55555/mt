@@ -1,6 +1,7 @@
 package rudp
 
 import (
+	"errors"
 	"fmt"
 	"net"
 	"sync"
@@ -167,6 +168,9 @@ func (p *Peer) sendPings(ping <-chan time.Time) {
 		select {
 		case <-ping:
 			if _, err := p.sendRaw(pkt); err != nil {
+				if errors.Is(err, net.ErrClosed) {
+					return
+				}
 				p.errs <- fmt.Errorf("can't send ping: %w", err)
 			}
 		case <-p.Disco():
@@ -176,7 +180,7 @@ func (p *Peer) sendPings(ping <-chan time.Time) {
 }
 
 // Connect connects to the server on conn
-// and closes conn when the Peer disconnects.
+// and closes conn when the returned *Peer disconnects.
 func Connect(conn net.PacketConn, addr net.Addr) *Peer {
 	srv := newPeer(conn, addr, PeerIDSrv, PeerIDNil)
 
