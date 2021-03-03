@@ -1,7 +1,6 @@
 package rudp
 
 import (
-	"encoding/binary"
 	"errors"
 	"fmt"
 	"net"
@@ -17,7 +16,7 @@ type Listener struct {
 	mu        sync.Mutex
 	addr2peer map[string]cltPeer
 	id2peer   map[PeerID]cltPeer
-	peerid    PeerID
+	peerID    PeerID
 }
 
 // Listen listens for packets on conn until it is closed.
@@ -91,18 +90,18 @@ func (l *Listener) processNetPkt(pkt netPkt) error {
 
 	clt, ok := l.addr2peer[addrstr]
 	if !ok {
-		prev := l.peerid
-		for l.id2peer[l.peerid].Peer != nil || l.peerid < PeerIDCltMin {
-			if l.peerid == prev-1 {
+		prev := l.peerID
+		for l.id2peer[l.peerID].Peer != nil || l.peerID < PeerIDCltMin {
+			if l.peerID == prev-1 {
 				return ErrOutOfPeerIDs
 			}
-			l.peerid++
+			l.peerID++
 		}
 
 		pkts := make(chan netPkt, 256)
 
 		clt = cltPeer{
-			Peer:     newPeer(l.conn, pkt.SrcAddr, l.peerid, PeerIDSrv),
+			Peer:     newPeer(l.conn, pkt.SrcAddr, l.peerID, PeerIDSrv),
 			pkts:     pkts,
 			accepted: make(chan struct{}),
 		}
@@ -113,7 +112,7 @@ func (l *Listener) processNetPkt(pkt netPkt) error {
 		data := make([]byte, 1+1+2)
 		data[0] = uint8(rawTypeCtl)
 		data[1] = uint8(ctlSetPeerID)
-		binary.BigEndian.PutUint16(data[2:4], uint16(clt.ID()))
+		be.PutUint16(data[2:4], uint16(clt.ID()))
 		if _, err := clt.sendRaw(rawPkt{Data: data}); err != nil {
 			if errors.Is(err, net.ErrClosed) {
 				return nil

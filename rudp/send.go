@@ -1,7 +1,6 @@
 package rudp
 
 import (
-	"encoding/binary"
 	"errors"
 	"fmt"
 	"math"
@@ -45,20 +44,20 @@ func (p *Peer) Send(pkt Pkt) (ack <-chan struct{}, err error) {
 		return nil, ErrChNoTooBig
 	}
 
-	hdrsize := MtHdrSize
+	hdrSize := MtHdrSize
 	if !pkt.Unrel {
-		hdrsize += RelHdrSize
+		hdrSize += RelHdrSize
 	}
 
-	if hdrsize+OrigHdrSize+len(pkt.Data) > MaxNetPktSize {
+	if hdrSize+OrigHdrSize+len(pkt.Data) > MaxNetPktSize {
 		c := &p.chans[pkt.ChNo]
 
-		c.outsplitmu.Lock()
-		sn := c.outsplitsn
-		c.outsplitsn++
-		c.outsplitmu.Unlock()
+		c.outSplitMu.Lock()
+		sn := c.outSplitSN
+		c.outSplitSN++
+		c.outSplitMu.Unlock()
 
-		chunks := split(pkt.Data, MaxNetPktSize-(hdrsize+SplitHdrSize))
+		chunks := split(pkt.Data, MaxNetPktSize-(hdrSize+SplitHdrSize))
 
 		if len(chunks) > math.MaxUint16 {
 			return nil, ErrPktTooBig
@@ -69,9 +68,9 @@ func (p *Peer) Send(pkt Pkt) (ack <-chan struct{}, err error) {
 		for i, chunk := range chunks {
 			data := make([]byte, SplitHdrSize+len(chunk))
 			data[0] = uint8(rawTypeSplit)
-			binary.BigEndian.PutUint16(data[1:3], uint16(sn))
-			binary.BigEndian.PutUint16(data[3:5], uint16(len(chunks)))
-			binary.BigEndian.PutUint16(data[5:7], uint16(i))
+			be.PutUint16(data[1:3], uint16(sn))
+			be.PutUint16(data[3:5], uint16(len(chunks)))
+			be.PutUint16(data[5:7], uint16(i))
 			copy(data[SplitHdrSize:], chunk)
 
 			wg.Add(1)
@@ -84,9 +83,6 @@ func (p *Peer) Send(pkt Pkt) (ack <-chan struct{}, err error) {
 				return nil, err
 			}
 			if !pkt.Unrel {
-				if ack == nil {
-					panic("ack is nil")
-				}
 				go func() {
 					<-ack
 					wg.Done()
@@ -135,8 +131,8 @@ func (p *Peer) sendRaw(pkt rawPkt) (ack <-chan struct{}, err error) {
 	}
 
 	data := make([]byte, MtHdrSize+len(pkt.Data))
-	binary.BigEndian.PutUint32(data[0:4], protoID)
-	binary.BigEndian.PutUint16(data[4:6], uint16(p.idOfPeer))
+	be.PutUint32(data[0:4], protoID)
+	be.PutUint16(data[4:6], uint16(p.idOfPeer))
 	data[6] = pkt.ChNo
 	copy(data[MtHdrSize:], pkt.Data)
 
@@ -144,13 +140,10 @@ func (p *Peer) sendRaw(pkt rawPkt) (ack <-chan struct{}, err error) {
 		return nil, ErrPktTooBig
 	}
 
-	_, err = p.Conn().WriteTo(data, p.Addr())
-	if errors.Is(err, net.ErrWriteToConnected) {
-		conn, ok := p.Conn().(net.Conn)
-		if !ok {
-			return nil, err
-		}
-		_, err = conn.Write(data)
+	if p.conn != nil {
+		_, err = p.conn.Write(data)
+	} else {
+		_, err = p.pc.WriteTo(data, p.Addr())
 	}
 	if err != nil {
 		return nil, err
@@ -164,38 +157,38 @@ func (p *Peer) sendRaw(pkt rawPkt) (ack <-chan struct{}, err error) {
 // sendRel sends a reliable raw packet to the Peer.
 func (p *Peer) sendRel(pkt rawPkt) (ack <-chan struct{}, err error) {
 	if pkt.Unrel {
-		panic("mt/rudp: sendRel: pkt.Unrel is true")
+		panic("pkt.Unrel is true")
 	}
 
 	c := &p.chans[pkt.ChNo]
 
-	c.outrelmu.Lock()
-	defer c.outrelmu.Unlock()
+	c.outRelMu.Lock()
+	defer c.outRelMu.Unlock()
 
-	sn := c.outrelsn
-	for ; sn-c.outrelwin >= 0x8000; c.outrelwin++ {
-		if ack, ok := c.ackchans.Load(c.outrelwin); ok {
+	sn := c.outRelSN
+	for ; sn-c.outRelWin >= 0x8000; c.outRelWin++ {
+		if ack, ok := c.ackChans.Load(c.outRelWin); ok {
 			<-ack.(chan struct{})
 		}
 	}
-	c.outrelsn++
+	c.outRelSN++
 
 	rwack := make(chan struct{}) // close-only
-	c.ackchans.Store(sn, rwack)
+	c.ackChans.Store(sn, rwack)
 	ack = rwack
 
-	reldata := make([]byte, RelHdrSize+len(pkt.Data))
-	reldata[0] = uint8(rawTypeRel)
-	binary.BigEndian.PutUint16(reldata[1:3], uint16(sn))
-	copy(reldata[RelHdrSize:], pkt.Data)
-	relpkt := rawPkt{
-		Data:  reldata,
+	data := make([]byte, RelHdrSize+len(pkt.Data))
+	data[0] = uint8(rawTypeRel)
+	be.PutUint16(data[1:3], uint16(sn))
+	copy(data[RelHdrSize:], pkt.Data)
+	rel := rawPkt{
+		Data:  data,
 		ChNo:  pkt.ChNo,
 		Unrel: true,
 	}
 
-	if _, err := p.sendRaw(relpkt); err != nil {
-		c.ackchans.Delete(sn)
+	if _, err := p.sendRaw(rel); err != nil {
+		c.ackChans.Delete(sn)
 
 		return nil, err
 	}
@@ -204,7 +197,7 @@ func (p *Peer) sendRel(pkt rawPkt) (ack <-chan struct{}, err error) {
 		for {
 			select {
 			case <-time.After(500 * time.Millisecond):
-				if _, err := p.sendRaw(relpkt); err != nil {
+				if _, err := p.sendRaw(rel); err != nil {
 					if errors.Is(err, net.ErrClosed) {
 						return
 					}

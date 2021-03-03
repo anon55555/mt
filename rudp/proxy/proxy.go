@@ -16,7 +16,7 @@ import (
 	"net"
 	"os"
 
-	"github.com/anon55555/mt/rudp"
+	"mt/rudp"
 )
 
 func main() {

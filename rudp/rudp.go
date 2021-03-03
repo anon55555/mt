@@ -7,6 +7,10 @@ by multiple goroutines.
 */
 package rudp
 
+import "encoding/binary"
+
+var be = binary.BigEndian
+
 // protoID must be at the start of every network packet.
 const protoID uint32 = 0x4f457403
 
