@@ -25,62 +25,55 @@ func main() {
 		os.Exit(1)
 	}
 
-	srvaddr, err := net.ResolveUDPAddr("udp", os.Args[1])
+	pc, err := net.ListenPacket("udp", os.Args[2])
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer pc.Close()
 
-	lc, err := net.ListenPacket("udp", os.Args[2])
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer lc.Close()
-
-	l := rudp.Listen(lc)
+	l := rudp.Listen(pc)
 	for {
 		clt, err := l.Accept()
 		if err != nil {
-			log.Print(err)
+			log.Print("accept: ", err)
 			continue
 		}
 
-		log.Print(clt.Addr(), " connected")
+		log.Print(clt.ID(), ": connected")
 
-		conn, err := net.DialUDP("udp", nil, srvaddr)
+		conn, err := net.Dial("udp", os.Args[1])
 		if err != nil {
 			log.Print(err)
 			continue
 		}
-		srv := rudp.Connect(conn, conn.RemoteAddr())
+		srv := rudp.Connect(conn)
 
 		go proxy(clt, srv)
 		go proxy(srv, clt)
 	}
 }
 
-func proxy(src, dest *rudp.Peer) {
+func proxy(src, dest *rudp.Conn) {
+	s := fmt.Sprint(src.ID(), " (", src.RemoteAddr(), "): ")
+
 	for {
 		pkt, err := src.Recv()
 		if err != nil {
 			if errors.Is(err, net.ErrClosed) {
-				msg := src.Addr().String() + " disconnected"
-				if src.TimedOut() {
-					msg += " (timed out)"
+				if err := src.WhyClosed(); err != nil {
+					log.Print(s, "disconnected: ", err)
+				} else {
+					log.Print(s, "disconnected")
 				}
-				log.Print(msg)
-
 				break
 			}
 
-			log.Print(err)
+			log.Print(s, err)
 			continue
 		}
 
-		if _, err := dest.Send(pkt); err != nil {
-			log.Print(err)
-		}
+		dest.Send(pkt)
 	}
 
-	dest.SendDisco(0, true)
 	dest.Close()
 }
