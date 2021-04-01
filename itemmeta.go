@@ -31,14 +31,13 @@ func (m ItemMeta) Fields() []Field {
 	if len(m) > 0 && m[0] == 1 {
 		m = m[1:]
 		eat := func(stop byte) string {
-			for i := 0; i < len(m); i++ {
-				if m[i] == stop {
-					defer func() {
-						m = m[i+1:]
-					}()
-					return string(m[:i])
-				}
+			if i := strings.IndexByte(string(m), stop); i != -1 {
+				defer func() {
+					m = m[i+1:]
+				}()
+				return string(m[:i])
 			}
+
 			defer func() {
 				m = ""
 			}()
