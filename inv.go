@@ -23,16 +23,24 @@ func (inv Inv) List(name string) *NamedInvList {
 }
 
 func (i Inv) Serialize(w io.Writer) error {
+	return i.SerializeKeep(w, nil)
+}
+
+func (i Inv) SerializeKeep(w io.Writer, old Inv) error {
+	ew := &errWriter{w: w}
+
 	for _, l := range i {
-		if _, err := fmt.Fprintln(w, "List", l.Name, len(l.Stacks)); err != nil {
-			return err
+		if reflect.DeepEqual(&i, old.List(l.Name)) {
+			fmt.Fprintln(ew, "KeepList", l.Name)
+			continue
 		}
-		if err := l.Serialize(w); err != nil {
-			return err
-		}
+
+		fmt.Fprintln(ew, "List", l.Name, len(l.Stacks))
+		l.Serialize(ew)
 	}
-	_, err := fmt.Fprintln(w, "EndInventory")
-	return err
+	fmt.Fprintln(ew, "EndInventory")
+
+	return ew.err
 }
 
 func (i *Inv) Deserialize(r io.Reader) (err error) {
@@ -72,9 +80,9 @@ func (i *Inv) Deserialize(r io.Reader) (err error) {
 			},
 		}); err != nil {
 			if err == io.EOF {
-				s.ret(io.ErrUnexpectedEOF)
+				return io.ErrUnexpectedEOF
 			}
-			s.ret(err)
+			return err
 		}
 	}
 }
@@ -85,47 +93,53 @@ type InvList struct {
 }
 
 func (l InvList) Serialize(w io.Writer) error {
-	if _, err := fmt.Fprintln(w, "Width", l.Width); err != nil {
-		return err
-	}
-	for _, i := range l.Stacks {
-		if i.Count > 0 {
-			if _, err := fmt.Fprintln(w, "Item", i); err != nil {
-				return err
-			}
-		} else {
-			if _, err := fmt.Fprintln(w, "Empty"); err != nil {
-				return err
-			}
-		}
-	}
-	_, err := fmt.Fprintln(w, "EndInventoryList")
-	return err
+	return l.SerializeKeep(w, InvList{})
 }
 
-func (i *InvList) Deserialize(r io.Reader) (err error) {
+func (l InvList) SerializeKeep(w io.Writer, old InvList) error {
+	ew := &errWriter{w: w}
+
+	fmt.Fprintln(ew, "Width", l.Width)
+	for i, s := range l.Stacks {
+		if i < len(old.Stacks) && s == old.Stacks[i] {
+			fmt.Fprintln(ew, "Keep")
+		}
+
+		if s.Count > 0 {
+			fmt.Fprintln(ew, "Item", s)
+		} else {
+			fmt.Fprintln(ew, "Empty")
+		}
+	}
+	fmt.Fprintln(ew, "EndInventoryList")
+
+	return ew.err
+}
+
+func (l *InvList) Deserialize(r io.Reader) (err error) {
 	s := new(sentinal)
 	defer s.recover(&err)
 
-	if _, err := fmt.Fscanf(r, "Width %d\n", &i.Width); err != nil {
-		s.ret(err)
+	if _, err := fmt.Fscanf(r, "Width %d\n", &l.Width); err != nil {
+		return err
 	}
 
-	i.Stacks = i.Stacks[:0]
+	old := l.Stacks
+	l.Stacks = nil
 
 	for {
 		if err := readCmdLn(r, map[string]interface{}{
 			"Empty": func() {
-				i.Stacks = append(i.Stacks, Stack{})
+				l.Stacks = append(l.Stacks, Stack{})
 			},
 			"Item": func(stk Stack) {
-				i.Stacks = append(i.Stacks, stk)
+				l.Stacks = append(l.Stacks, stk)
 			},
 			"Keep": func() {
-				if len(i.Stacks) < cap(i.Stacks) {
-					i.Stacks = i.Stacks[:len(i.Stacks)+1]
+				if i := len(l.Stacks); i < len(old) {
+					l.Stacks = append(l.Stacks, old[i])
 				} else {
-					i.Stacks = append(i.Stacks, Stack{})
+					l.Stacks = append(l.Stacks, Stack{})
 				}
 			},
 			"EndInventoryList": func() {
@@ -133,9 +147,9 @@ func (i *InvList) Deserialize(r io.Reader) (err error) {
 			},
 		}); err != nil {
 			if err == io.EOF {
-				s.ret(io.ErrUnexpectedEOF)
+				return io.ErrUnexpectedEOF
 			}
-			s.ret(err)
+			return err
 		}
 	}
 }
@@ -182,9 +196,28 @@ func (s *sentinal) ret(err error) {
 }
 
 func (s *sentinal) recover(p *error) {
-	if r := recover(); r == s {
-		*p = s.err
-	} else {
-		panic(r)
+	if r := recover(); r != nil {
+		if r == s {
+			*p = s.err
+		} else {
+			panic(r)
+		}
 	}
+}
+
+type errWriter struct {
+	w   io.Writer
+	err error
+}
+
+func (ew *errWriter) Write(p []byte) (int, error) {
+	if ew.err != nil {
+		return 0, ew.err
+	}
+
+	n, err := ew.w.Write(p)
+	if err != nil {
+		ew.err = err
+	}
+	return n, err
 }
