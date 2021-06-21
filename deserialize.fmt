@@ -1,0 +1,121 @@
+	func readBuf(r io.Reader, n int) []byte {
+		buf := make([]byte, n)
+		_, err := io.ReadFull(r, buf)
+		chk(err)
+		return buf
+	}
+	
+	func read8 (r io.Reader) uint8  { return readBuf(r, 1)[0] }
+	func read16(r io.Reader) uint16 { return be.Uint16(readBuf(r, 2)) }
+	func read32(r io.Reader) uint32 { return be.Uint32(readBuf(r, 4)) }
+	func read64(r io.Reader) uint64 { return be.Uint64(readBuf(r, 8)) }
+
+byte	*p = read8(r)
+uint8	*p = read8(r)
+uint16	*p = read16(r)
+uint32	*p = read32(r)
+uint64	*p = read64(r)
+
+int8	*p = int8(read8(r))
+int16	*p = int16(read16(r))
+int32	*p = int32(read32(r))
+int64	*p = int64(read64(r))
+
+bool	switch n := read8(r); n {
+	case 0:
+		*p = false
+	case 1:
+		*p = true
+	default:
+		chk(fmt.Errorf("invalid bool: %d", n))
+	}
+
+float32	*p = math.Float32frombits(read32(r))
+float64	*p = math.Float64frombits(read64(r))
+
+AOMsg	{
+		var err error
+		*p, err = readAOMsg(r)
+		chk(err)
+	}
+
+image/color.NRGBA	*p = color.NRGBA{A: read8(r), R: read8(r), G: read8(r), B: read8(r)}
+
+map[uint16]*NodeMeta	{
+		r, err := zlib.NewReader(byteReader{r})
+		chk(err)
+
+		switch ver := read8(r); ver {
+		case 0:
+			*p = nil
+		case 2:
+			n := read16(r)
+			*p = make(map[uint16]*NodeMeta, n)
+			for ; n > 0; n-- {
+				pos := read16(r)
+				nm := new(NodeMeta)
+				chk(deserialize(r, nm))
+				(*p)[pos] = nm
+			}
+		default:
+			chk(fmt.Errorf("unsupported nodemetas version: %d", ver))
+		}
+
+		chk(r.Close())
+	}
+
+map[[3]int16]*NodeMeta	{
+		r, err := zlib.NewReader(byteReader{r})
+		chk(err)
+
+		switch ver := read8(r); ver {
+		case 0:
+			*p = nil
+		case 2:
+			n := read16(r)
+			*p = make(map[[3]int16]*NodeMeta, n)
+			for ; n > 0; n-- {
+				var pos [3]int16
+				for i := range pos {
+					pos[i] = int16(read16(r))
+				}
+				nm := new(NodeMeta)
+				chk(deserialize(r, nm))
+				(*p)[pos] = nm
+			}
+		default:
+			chk(fmt.Errorf("unsupported nodemetas version: %d", ver))
+		}
+
+		chk(r.Close())
+	}
+
+PointedThing	{
+		var err error
+		*p, err = readPointedThing(r)
+		chk(err)
+	}
+
+[]AOMsg	{ // For AOInitData.Msgs.
+		*p = make([]AOMsg, read8(r))
+		for i := range *p {
+			r := &io.LimitedReader{r, int64(read32(r))}
+			msg, err := readAOMsg(r)
+			chk(err)
+			(*p)[i] = msg
+			if r.N > 0 {
+				chk(fmt.Errorf("%d bytes of trailing data", r.N))
+			}
+		}
+	}
+
+[]NodeDef	{ // For ToCltNodeDefs.Defs.
+		*p = make([]NodeDef, read16(r))
+		r := &io.LimitedReader{r, int64(read32(r))}
+		for i := range *p {
+			(*p)[i].deserialize(r)
+		}
+		if r.N > 0 {
+			chk(fmt.Errorf("%d bytes of trailing data", r.N))
+		}
+	}
