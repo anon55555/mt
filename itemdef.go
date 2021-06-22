@@ -11,6 +11,8 @@ const (
 	ToolItem
 )
 
+//go:generate stringer -type ItemType
+
 // An ItemDef defines the properties of an item.
 type ItemDef struct {
 	//mt:lenhdr 16

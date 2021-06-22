@@ -3,11 +3,13 @@ package mt
 type MinimapType uint16
 
 const (
-	NoMinimap MinimapType = iota
-	SurfaceMinimap
-	RadarMinimap
-	TextureMinimap
+	NoMinimap MinimapType = iota // none
+	SurfaceMinimap               // surface
+	RadarMinimap                 // radar
+	TextureMinimap               // texture
 )
+
+//go:generate stringer -linecomment -type MinimapType
 
 type MinimapMode struct {
 	Type  MinimapType

@@ -43,7 +43,7 @@ type AOProps struct {
 	Visual           string
 	VisualSize       [3]float32
 	Textures         []Texture
-	SpritesheetSize  [2]int16 // in sprites.
+	SpriteSheetSize  [2]int16 // in sprites.
 	SpritePos        [2]int16 // in sprite sheet.
 	Visible          bool
 	MakeFootstepSnds bool
@@ -167,11 +167,11 @@ type AOCmdAnimSpeed struct {
 	Speed float32
 }
 
-//go:generate ./cmdno.sh aocmds AOCmd ao uint8 AOMsg newAOMsg
-
 type AOMsg interface {
 	aoCmdNo() uint8
 }
+
+//go:generate ./cmdno.sh aocmds AOCmd ao uint8 AOMsg newAOMsg
 
 func writeAOMsg(w io.Writer, msg AOMsg) error {
 	if _, err := w.Write([]byte{msg.aoCmdNo()}); err != nil {

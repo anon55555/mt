@@ -8,6 +8,8 @@ const (
 	UserAlign
 )
 
+//go:generate stringer -type AlignType
+
 type TileFlags uint16
 
 const (
@@ -18,6 +20,8 @@ const (
 	TileScale
 	TileAlign
 )
+
+//go:generate stringer -type TileFlags
 
 type TileDef struct {
 	//mt:const uint8(6)

@@ -7,3 +7,5 @@ const (
 	SRP
 	FirstSRP
 )
+
+//go:generate stringer -type AuthMethods

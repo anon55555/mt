@@ -13,6 +13,8 @@ const (
 	NoDir
 )
 
+//go:generate stringer -type Dir
+
 // Opposite returns the Dir's opposite.
 // NoDir is its own opposite.
 func (d Dir) Opposite() Dir {

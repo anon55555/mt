@@ -128,7 +128,7 @@ map[[3]int16]*NodeMeta	{
 
 PointedThing	chk(writePointedThing(w, x))
 
-[]AOMsg	{ // For AOInitData.Msgs
+[]AOMsg	{ // For AOInitData.Msgs.
 		if len(x) > math.MaxUint8 {
 			chk(ErrTooLong)
 		}
@@ -145,7 +145,7 @@ PointedThing	chk(writePointedThing(w, x))
 		}
 	}
 
-[]NodeDef	{ // For ToCltNodeDefs.Defs
+[]NodeDef	{ // For ToCltNodeDefs.Defs.
 		if len(x) > math.MaxUint16 {
 			chk(ErrTooLong)
 		}

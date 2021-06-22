@@ -1,5 +1,3 @@
-//go:generate ./cmdno.sh tocltcmds ToClt toClt uint16 Cmd newToCltCmd
-
 package mt
 
 import (
@@ -14,6 +12,8 @@ type ToCltCmd interface {
 	Cmd
 	toCltCmdNo() uint16
 }
+
+//go:generate ./cmdno.sh tocltcmds ToClt toClt uint16 Cmd newToCltCmd
 
 // ToCltHello is sent as a response to ToSrvInit.
 // The client responds to ToCltHello by authenticating.
@@ -196,25 +196,14 @@ type ToCltChatMsg struct {
 type ChatMsgType uint8
 
 const (
-	RawMsg ChatMsgType = iota
-	NormalMsg
-	AnnounceMsg
-	SysMsg
+	RawMsg ChatMsgType = iota // raw
+	NormalMsg                 // normal
+	AnnounceMsg               // announce
+	SysMsg                    // sys
 	maxMsg
 )
 
-func (t ChatMsgType) String() string {
-	if t >= maxMsg {
-		return fmt.Sprintf("ChatMsgType(%d)", t)
-	}
-
-	return [...]string{
-		"raw",
-		"normal",
-		"announce",
-		"sys",
-	}[t]
-}
+//go:generate stringer -linecomment -type ChatMsgType
 
 // ToCltAORmAdd tells the client that AOs have been removed from and/or added to
 // the AOs that it can see.
@@ -454,6 +443,8 @@ const (
 	ImgWaypointHUD
 )
 
+//go:generate stringer -type HUDType
+
 // ToCltRmHUD tells the client to remove a HUD.
 type ToCltRmHUD struct {
 	ID HUDID
@@ -539,6 +530,8 @@ const (
 	hudMax
 )
 
+//go:generate stringer -trimprefix HUD -type HUDField
+
 // ToCltHUDFlags tells the client to update its HUD flags.
 type ToCltHUDFlags struct {
 	// &^= Mask
@@ -579,6 +572,8 @@ const (
 	HotbarImg
 	HotbarSelImg
 )
+
+//go:generate stringer -trimprefix Hotbar -type HotbarParam
 
 // ToCltBreath tells the client how much breath it has.
 type ToCltBreath struct {
@@ -655,10 +650,12 @@ type ToCltUpdatePlayerList struct {
 type PlayerListUpdateType uint8
 
 const (
-	InitPlayers PlayerListUpdateType = iota
-	AddPlayers
-	RemovePlayers
+	InitPlayers PlayerListUpdateType = iota // init
+	AddPlayers                              // add
+	RemovePlayers                           // remove
 )
+
+//go:generate stringer -linecomment -type PlayerListUpdateType
 
 // ToCltModChanMsg tells the client it has been sent a message on a mod channel.
 type ToCltModChanMsg struct {
@@ -683,6 +680,8 @@ const (
 	NotRegistered
 	SetState
 )
+
+//go:generate stringer -type ModChanSig
 
 // ToCltModChanMsg is sent when node metadata near the client changes.
 type ToCltNodeMetasChanged struct {

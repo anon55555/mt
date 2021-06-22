@@ -1,11 +1,11 @@
-//go:generate ./cmdno.sh tosrvcmds ToSrv toSrv uint16 Cmd newToSrvCmd
-
 package mt
 
 type ToSrvCmd interface {
 	Cmd
 	toSrvCmdNo() uint16
 }
+
+//go:generate ./cmdno.sh tosrvcmds ToSrv toSrv uint16 Cmd newToSrvCmd
 
 // ToSrvNil is the first packet sent in a connection.
 type ToSrvNil struct{}
@@ -108,6 +108,8 @@ const (
 	Use      // Left click snowball-like.
 	Activate // Right click air.
 )
+
+//go:generate stringer -type Interaction
 
 // ToSrvRemovedSounds tells the server that the client has finished playing
 // the sounds with the given IDs.

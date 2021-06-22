@@ -9,6 +9,8 @@ const (
 	P1Light
 )
 
+//go:generate stringer -trimprefix P1 -type Param1Type
+
 type Param2Type uint8
 
 const (
@@ -25,6 +27,8 @@ const (
 	P2ColorMounted
 	P2GlassLikeLevel
 )
+
+//go:generate stringer -trimprefix P2 -type Param2Type
 
 // A DrawType specifies how a node is drawn.
 type DrawType uint8
@@ -50,6 +54,8 @@ const (
 	DrawRootedPlant
 )
 
+//go:generate stringer -trimprefix Draw -type DrawType
+
 type WaveType uint8
 
 const (
@@ -59,6 +65,8 @@ const (
 	LiquidWaving          // Wave up and down.
 )
 
+//go:generate stringer -type WaveType
+
 type LiquidType uint8
 
 const (
@@ -66,6 +74,8 @@ const (
 	FlowingLiquid
 	LiquidSrc
 )
+
+//go:generate stringer -type LiquidType
 
 // AlphaUse specifies how the alpha channel of a texture is used.
 type AlphaUse uint8
@@ -76,6 +86,8 @@ const (
 	Opaque
 	Legacy
 )
+
+//go:generate stringer -type AlphaUse
 
 type NodeDef struct {
 	Param0 Content

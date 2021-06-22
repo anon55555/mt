@@ -11,3 +11,5 @@ const (
 	Day LightBank = iota
 	Night
 )
+
+//go:generate stringer -type LightBank
