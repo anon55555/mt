@@ -5,9 +5,9 @@ package mt
 func (*ToSrvNil) toSrvCmdNo() uint16            { return 0 }
 func (*ToSrvInit) toSrvCmdNo() uint16           { return 2 }
 func (*ToSrvInit2) toSrvCmdNo() uint16          { return 17 }
-func (*ToSrvModChanJoin) toSrvCmdNo() uint16    { return 23 }
-func (*ToSrvModChanLeave) toSrvCmdNo() uint16   { return 24 }
-func (*ToSrvModChanMsg) toSrvCmdNo() uint16     { return 25 }
+func (*ToSrvJoinModChan) toSrvCmdNo() uint16    { return 23 }
+func (*ToSrvLeaveModChan) toSrvCmdNo() uint16   { return 24 }
+func (*ToSrvMsgModChan) toSrvCmdNo() uint16     { return 25 }
 func (*ToSrvPlayerPos) toSrvCmdNo() uint16      { return 35 }
 func (*ToSrvGotBlks) toSrvCmdNo() uint16        { return 36 }
 func (*ToSrvDeletedBlks) toSrvCmdNo() uint16    { return 37 }
@@ -30,9 +30,9 @@ var newToSrvCmd = map[uint16]func() Cmd{
 	0:  func() Cmd { return new(ToSrvNil) },
 	2:  func() Cmd { return new(ToSrvInit) },
 	17: func() Cmd { return new(ToSrvInit2) },
-	23: func() Cmd { return new(ToSrvModChanJoin) },
-	24: func() Cmd { return new(ToSrvModChanLeave) },
-	25: func() Cmd { return new(ToSrvModChanMsg) },
+	23: func() Cmd { return new(ToSrvJoinModChan) },
+	24: func() Cmd { return new(ToSrvLeaveModChan) },
+	25: func() Cmd { return new(ToSrvMsgModChan) },
 	35: func() Cmd { return new(ToSrvPlayerPos) },
 	36: func() Cmd { return new(ToSrvGotBlks) },
 	37: func() Cmd { return new(ToSrvDeletedBlks) },

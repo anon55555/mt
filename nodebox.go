@@ -5,11 +5,11 @@ type Box [2]Vec
 type NodeBoxType uint8
 
 const (
-	CubeBox NodeBoxType = iota // Cube
-	FixedBox                   // Fixed
-	MountedBox                 // Mounted
-	LeveledBox                 // Leveled
-	ConnectedBox               // Connected
+	CubeBox      NodeBoxType = iota // Cube
+	FixedBox                        // Fixed
+	MountedBox                      // Mounted
+	LeveledBox                      // Leveled
+	ConnectedBox                    // Connected
 	maxBox
 )
 

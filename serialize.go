@@ -303,7 +303,7 @@ func (obj *ToSrvInit2) deserialize(r io.Reader) {
 	}))(obj)).Lang) = string(local3)
 }
 
-func (obj *ToSrvModChanJoin) serialize(w io.Writer) {
+func (obj *ToSrvJoinModChan) serialize(w io.Writer) {
 	if len(([]byte((*(*(struct {
 		Channel string
 	}))(obj)).Channel))) > math.MaxUint16 {
@@ -323,7 +323,7 @@ func (obj *ToSrvModChanJoin) serialize(w io.Writer) {
 	}
 }
 
-func (obj *ToSrvModChanJoin) deserialize(r io.Reader) {
+func (obj *ToSrvJoinModChan) deserialize(r io.Reader) {
 	var local5 []uint8
 	var local6 uint16
 	{
@@ -340,7 +340,7 @@ func (obj *ToSrvModChanJoin) deserialize(r io.Reader) {
 	}))(obj)).Channel) = string(local5)
 }
 
-func (obj *ToSrvModChanLeave) serialize(w io.Writer) {
+func (obj *ToSrvLeaveModChan) serialize(w io.Writer) {
 	if len(([]byte((*(*(struct {
 		Channel string
 	}))(obj)).Channel))) > math.MaxUint16 {
@@ -360,7 +360,7 @@ func (obj *ToSrvModChanLeave) serialize(w io.Writer) {
 	}
 }
 
-func (obj *ToSrvModChanLeave) deserialize(r io.Reader) {
+func (obj *ToSrvLeaveModChan) deserialize(r io.Reader) {
 	var local7 []uint8
 	var local8 uint16
 	{
@@ -377,7 +377,7 @@ func (obj *ToSrvModChanLeave) deserialize(r io.Reader) {
 	}))(obj)).Channel) = string(local7)
 }
 
-func (obj *ToSrvModChanMsg) serialize(w io.Writer) {
+func (obj *ToSrvMsgModChan) serialize(w io.Writer) {
 	if len(([]byte((*(*(struct {
 		Channel string
 		Msg     string
@@ -420,7 +420,7 @@ func (obj *ToSrvModChanMsg) serialize(w io.Writer) {
 	}
 }
 
-func (obj *ToSrvModChanMsg) deserialize(r io.Reader) {
+func (obj *ToSrvMsgModChan) deserialize(r io.Reader) {
 	var local9 []uint8
 	var local10 uint16
 	{

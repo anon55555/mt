@@ -30,18 +30,18 @@ type ToSrvInit2 struct {
 	Lang string
 }
 
-// ToSrvModChanJoin attempts to join a mod channel.
-type ToSrvModChanJoin struct {
+// ToSrvJoinModChan attempts to join a mod channel.
+type ToSrvJoinModChan struct {
 	Channel string
 }
 
-// ToSrvModChanJoin attempts to leave a mod channel.
-type ToSrvModChanLeave struct {
+// ToSrvJoinModChan attempts to leave a mod channel.
+type ToSrvLeaveModChan struct {
 	Channel string
 }
 
-// ToSrvModChanJoin sends a message on a mod channel.
-type ToSrvModChanMsg struct {
+// ToSrvJoinModChan sends a message on a mod channel.
+type ToSrvMsgModChan struct {
 	Channel string
 	Msg     string
 }

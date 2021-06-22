@@ -1,9 +1,9 @@
 0	Nil
 2	Init
 17	Init2
-23	ModChanJoin
-24	ModChanLeave
-25	ModChanMsg
+23	JoinModChan
+24	LeaveModChan
+25	MsgModChan
 35	PlayerPos
 36	GotBlks
 37	DeletedBlks

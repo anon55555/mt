@@ -64,9 +64,9 @@ func (*ToCltMinimapModes) DefaultPktInfo() rudp.PktInfo          { return rudp.P
 func (*ToSrvNil) DefaultPktInfo() rudp.PktInfo                   { return rudp.PktInfo{0, false} }
 func (*ToSrvInit) DefaultPktInfo() rudp.PktInfo                  { return rudp.PktInfo{1, true} }
 func (*ToSrvInit2) DefaultPktInfo() rudp.PktInfo                 { return rudp.PktInfo{1, false} }
-func (*ToSrvModChanJoin) DefaultPktInfo() rudp.PktInfo           { return rudp.PktInfo{0, false} }
-func (*ToSrvModChanLeave) DefaultPktInfo() rudp.PktInfo          { return rudp.PktInfo{0, false} }
-func (*ToSrvModChanMsg) DefaultPktInfo() rudp.PktInfo            { return rudp.PktInfo{0, false} }
+func (*ToSrvJoinModChan) DefaultPktInfo() rudp.PktInfo           { return rudp.PktInfo{0, false} }
+func (*ToSrvLeaveModChan) DefaultPktInfo() rudp.PktInfo          { return rudp.PktInfo{0, false} }
+func (*ToSrvMsgModChan) DefaultPktInfo() rudp.PktInfo            { return rudp.PktInfo{0, false} }
 func (*ToSrvPlayerPos) DefaultPktInfo() rudp.PktInfo             { return rudp.PktInfo{0, true} }
 func (*ToSrvGotBlks) DefaultPktInfo() rudp.PktInfo               { return rudp.PktInfo{2, false} }
 func (*ToSrvDeletedBlks) DefaultPktInfo() rudp.PktInfo           { return rudp.PktInfo{2, false} }

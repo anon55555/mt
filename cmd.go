@@ -63,9 +63,9 @@ func (*ToCltMinimapModes) cmd()          {}
 func (*ToSrvNil) cmd()            {}
 func (*ToSrvInit) cmd()           {}
 func (*ToSrvInit2) cmd()          {}
-func (*ToSrvModChanJoin) cmd()    {}
-func (*ToSrvModChanLeave) cmd()   {}
-func (*ToSrvModChanMsg) cmd()     {}
+func (*ToSrvJoinModChan) cmd()    {}
+func (*ToSrvLeaveModChan) cmd()   {}
+func (*ToSrvMsgModChan) cmd()     {}
 func (*ToSrvPlayerPos) cmd()      {}
 func (*ToSrvGotBlks) cmd()        {}
 func (*ToSrvDeletedBlks) cmd()    {}

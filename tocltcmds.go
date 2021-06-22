@@ -196,10 +196,10 @@ type ToCltChatMsg struct {
 type ChatMsgType uint8
 
 const (
-	RawMsg ChatMsgType = iota // raw
-	NormalMsg                 // normal
-	AnnounceMsg               // announce
-	SysMsg                    // sys
+	RawMsg      ChatMsgType = iota // raw
+	NormalMsg                      // normal
+	AnnounceMsg                    // announce
+	SysMsg                         // sys
 	maxMsg
 )
 
@@ -650,9 +650,9 @@ type ToCltUpdatePlayerList struct {
 type PlayerListUpdateType uint8
 
 const (
-	InitPlayers PlayerListUpdateType = iota // init
-	AddPlayers                              // add
-	RemovePlayers                           // remove
+	InitPlayers   PlayerListUpdateType = iota // init
+	AddPlayers                                // add
+	RemovePlayers                             // remove
 )
 
 //go:generate stringer -linecomment -type PlayerListUpdateType

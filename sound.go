@@ -5,9 +5,9 @@ type SoundID int32
 type SoundSrcType uint8
 
 const (
-	NoSrc SoundSrcType = iota // nowhere
-	PosSrc                    // pos
-	AOSrc                     // ao
+	NoSrc  SoundSrcType = iota // nowhere
+	PosSrc                     // pos
+	AOSrc                      // ao
 )
 
 //go:generate stringer -linecomment -type SoundSrcType

@@ -3,9 +3,9 @@ package mt
 type AnimType uint8
 
 const (
-	NoAnim AnimType = iota // none
-	VerticalFrameAnim      // vertical frame
-	SpriteSheetAnim        // sprite sheet
+	NoAnim            AnimType = iota // none
+	VerticalFrameAnim                 // vertical frame
+	SpriteSheetAnim                   // sprite sheet
 	maxAnim
 )
 
