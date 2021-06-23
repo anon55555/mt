@@ -33897,34 +33897,34 @@ func (obj *ItemType) deserialize(r io.Reader) {
 func (obj *ToolCaps) serialize(w io.Writer) {
 	if _ = (*(*(struct {
 		//mt:if _ = %s; false
-		NonNil bool `json:"-"`
+		NonNil bool
 
-		AttackCooldown float32 `json:"full_punch_interval"`
-		MaxDropLvl     int16   `json:"max_drop_level"`
-
-		//mt:len32
-		GroupCaps []ToolGroupCaps `json:"groupcaps"`
+		AttackCooldown float32
+		MaxDropLvl     int16
 
 		//mt:len32
-		DmgGroups []Group `json:"damage_groups"`
+		GroupCaps []ToolGroupCaps
 
-		AttackUses uint16 `json:"punch_attack_uses"`
+		//mt:len32
+		DmgGroups []Group
+
+		AttackUses uint16
 	}))(obj)); false {
 		{
 			x := (*(*(struct {
 				//mt:if _ = %s; false
-				NonNil bool `json:"-"`
+				NonNil bool
 
-				AttackCooldown float32 `json:"full_punch_interval"`
-				MaxDropLvl     int16   `json:"max_drop_level"`
-
-				//mt:len32
-				GroupCaps []ToolGroupCaps `json:"groupcaps"`
+				AttackCooldown float32
+				MaxDropLvl     int16
 
 				//mt:len32
-				DmgGroups []Group `json:"damage_groups"`
+				GroupCaps []ToolGroupCaps
 
-				AttackUses uint16 `json:"punch_attack_uses"`
+				//mt:len32
+				DmgGroups []Group
+
+				AttackUses uint16
 			}))(obj)).NonNil
 			if x {
 				write8(w, 1)
@@ -33939,33 +33939,33 @@ func (obj *ToolCaps) serialize(w io.Writer) {
 		/*
 		   if r.N > 0 { (*(*(struct {
 		   	//mt:if _ = %s; false
-		   	NonNil	bool	`json:"-"`
+		   	NonNil	bool
 
-		   	AttackCooldown	float32	`json:"full_punch_interval"`
-		   	MaxDropLvl	int16	`json:"max_drop_level"`
-
-		   	//mt:len32
-		   	GroupCaps	[]ToolGroupCaps	`json:"groupcaps"`
+		   	AttackCooldown	float32
+		   	MaxDropLvl	int16
 
 		   	//mt:len32
-		   	DmgGroups	[]Group	`json:"damage_groups"`
+		   	GroupCaps	[]ToolGroupCaps
 
-		   	AttackUses	uint16	`json:"punch_attack_uses"`
+		   	//mt:len32
+		   	DmgGroups	[]Group
+
+		   	AttackUses	uint16
 		   }))(obj)).NonNil = true}; /**/{
 			if (*(*(struct {
 				//mt:if _ = %s; false
-				NonNil bool `json:"-"`
+				NonNil bool
 
-				AttackCooldown float32 `json:"full_punch_interval"`
-				MaxDropLvl     int16   `json:"max_drop_level"`
-
-				//mt:len32
-				GroupCaps []ToolGroupCaps `json:"groupcaps"`
+				AttackCooldown float32
+				MaxDropLvl     int16
 
 				//mt:len32
-				DmgGroups []Group `json:"damage_groups"`
+				GroupCaps []ToolGroupCaps
 
-				AttackUses uint16 `json:"punch_attack_uses"`
+				//mt:len32
+				DmgGroups []Group
+
+				AttackUses uint16
 			}))(obj)).NonNil {
 				{
 					local376 := uint8(5)
@@ -33977,104 +33977,104 @@ func (obj *ToolCaps) serialize(w io.Writer) {
 				{
 					x := (*(*(struct {
 						//mt:if _ = %s; false
-						NonNil bool `json:"-"`
+						NonNil bool
 
-						AttackCooldown float32 `json:"full_punch_interval"`
-						MaxDropLvl     int16   `json:"max_drop_level"`
-
-						//mt:len32
-						GroupCaps []ToolGroupCaps `json:"groupcaps"`
+						AttackCooldown float32
+						MaxDropLvl     int16
 
 						//mt:len32
-						DmgGroups []Group `json:"damage_groups"`
+						GroupCaps []ToolGroupCaps
 
-						AttackUses uint16 `json:"punch_attack_uses"`
+						//mt:len32
+						DmgGroups []Group
+
+						AttackUses uint16
 					}))(obj)).AttackCooldown
 					write32(w, math.Float32bits(x))
 				}
 				{
 					x := (*(*(struct {
 						//mt:if _ = %s; false
-						NonNil bool `json:"-"`
+						NonNil bool
 
-						AttackCooldown float32 `json:"full_punch_interval"`
-						MaxDropLvl     int16   `json:"max_drop_level"`
-
-						//mt:len32
-						GroupCaps []ToolGroupCaps `json:"groupcaps"`
+						AttackCooldown float32
+						MaxDropLvl     int16
 
 						//mt:len32
-						DmgGroups []Group `json:"damage_groups"`
+						GroupCaps []ToolGroupCaps
 
-						AttackUses uint16 `json:"punch_attack_uses"`
+						//mt:len32
+						DmgGroups []Group
+
+						AttackUses uint16
 					}))(obj)).MaxDropLvl
 					write16(w, uint16(x))
 				}
 				if len(((*(*(struct {
 					//mt:if _ = %s; false
-					NonNil bool `json:"-"`
+					NonNil bool
 
-					AttackCooldown float32 `json:"full_punch_interval"`
-					MaxDropLvl     int16   `json:"max_drop_level"`
-
-					//mt:len32
-					GroupCaps []ToolGroupCaps `json:"groupcaps"`
+					AttackCooldown float32
+					MaxDropLvl     int16
 
 					//mt:len32
-					DmgGroups []Group `json:"damage_groups"`
+					GroupCaps []ToolGroupCaps
 
-					AttackUses uint16 `json:"punch_attack_uses"`
+					//mt:len32
+					DmgGroups []Group
+
+					AttackUses uint16
 				}))(obj)).GroupCaps)) > math.MaxUint32 {
 					chk(ErrTooLong)
 				}
 				{
 					x := uint32(len(((*(*(struct {
 						//mt:if _ = %s; false
-						NonNil bool `json:"-"`
+						NonNil bool
 
-						AttackCooldown float32 `json:"full_punch_interval"`
-						MaxDropLvl     int16   `json:"max_drop_level"`
-
-						//mt:len32
-						GroupCaps []ToolGroupCaps `json:"groupcaps"`
+						AttackCooldown float32
+						MaxDropLvl     int16
 
 						//mt:len32
-						DmgGroups []Group `json:"damage_groups"`
+						GroupCaps []ToolGroupCaps
 
-						AttackUses uint16 `json:"punch_attack_uses"`
+						//mt:len32
+						DmgGroups []Group
+
+						AttackUses uint16
 					}))(obj)).GroupCaps)))
 					write32(w, uint32(x))
 				}
 				for local377 := range (*(*(struct {
 					//mt:if _ = %s; false
-					NonNil bool `json:"-"`
+					NonNil bool
 
-					AttackCooldown float32 `json:"full_punch_interval"`
-					MaxDropLvl     int16   `json:"max_drop_level"`
-
-					//mt:len32
-					GroupCaps []ToolGroupCaps `json:"groupcaps"`
+					AttackCooldown float32
+					MaxDropLvl     int16
 
 					//mt:len32
-					DmgGroups []Group `json:"damage_groups"`
+					GroupCaps []ToolGroupCaps
 
-					AttackUses uint16 `json:"punch_attack_uses"`
+					//mt:len32
+					DmgGroups []Group
+
+					AttackUses uint16
 				}))(obj)).GroupCaps {
 					if err := pcall(func() {
 						(((*(*(struct {
 							//mt:if _ = %s; false
-							NonNil bool `json:"-"`
+							NonNil bool
 
-							AttackCooldown float32 `json:"full_punch_interval"`
-							MaxDropLvl     int16   `json:"max_drop_level"`
-
-							//mt:len32
-							GroupCaps []ToolGroupCaps `json:"groupcaps"`
+							AttackCooldown float32
+							MaxDropLvl     int16
 
 							//mt:len32
-							DmgGroups []Group `json:"damage_groups"`
+							GroupCaps []ToolGroupCaps
 
-							AttackUses uint16 `json:"punch_attack_uses"`
+							//mt:len32
+							DmgGroups []Group
+
+							AttackUses uint16
 						}))(obj)).GroupCaps)[local377]).serialize(w)
 					}); err != nil {
 						if err == io.EOF {
@@ -34085,69 +34085,69 @@ func (obj *ToolCaps) serialize(w io.Writer) {
 				}
 				if len(((*(*(struct {
 					//mt:if _ = %s; false
-					NonNil bool `json:"-"`
+					NonNil bool
 
-					AttackCooldown float32 `json:"full_punch_interval"`
-					MaxDropLvl     int16   `json:"max_drop_level"`
-
-					//mt:len32
-					GroupCaps []ToolGroupCaps `json:"groupcaps"`
+					AttackCooldown float32
+					MaxDropLvl     int16
 
 					//mt:len32
-					DmgGroups []Group `json:"damage_groups"`
+					GroupCaps []ToolGroupCaps
 
-					AttackUses uint16 `json:"punch_attack_uses"`
+					//mt:len32
+					DmgGroups []Group
+
+					AttackUses uint16
 				}))(obj)).DmgGroups)) > math.MaxUint32 {
 					chk(ErrTooLong)
 				}
 				{
 					x := uint32(len(((*(*(struct {
 						//mt:if _ = %s; false
-						NonNil bool `json:"-"`
+						NonNil bool
 
-						AttackCooldown float32 `json:"full_punch_interval"`
-						MaxDropLvl     int16   `json:"max_drop_level"`
-
-						//mt:len32
-						GroupCaps []ToolGroupCaps `json:"groupcaps"`
+						AttackCooldown float32
+						MaxDropLvl     int16
 
 						//mt:len32
-						DmgGroups []Group `json:"damage_groups"`
+						GroupCaps []ToolGroupCaps
 
-						AttackUses uint16 `json:"punch_attack_uses"`
+						//mt:len32
+						DmgGroups []Group
+
+						AttackUses uint16
 					}))(obj)).DmgGroups)))
 					write32(w, uint32(x))
 				}
 				for local378 := range (*(*(struct {
 					//mt:if _ = %s; false
-					NonNil bool `json:"-"`
+					NonNil bool
 
-					AttackCooldown float32 `json:"full_punch_interval"`
-					MaxDropLvl     int16   `json:"max_drop_level"`
-
-					//mt:len32
-					GroupCaps []ToolGroupCaps `json:"groupcaps"`
+					AttackCooldown float32
+					MaxDropLvl     int16
 
 					//mt:len32
-					DmgGroups []Group `json:"damage_groups"`
+					GroupCaps []ToolGroupCaps
 
-					AttackUses uint16 `json:"punch_attack_uses"`
+					//mt:len32
+					DmgGroups []Group
+
+					AttackUses uint16
 				}))(obj)).DmgGroups {
 					if err := pcall(func() {
 						(((*(*(struct {
 							//mt:if _ = %s; false
-							NonNil bool `json:"-"`
+							NonNil bool
 
-							AttackCooldown float32 `json:"full_punch_interval"`
-							MaxDropLvl     int16   `json:"max_drop_level"`
-
-							//mt:len32
-							GroupCaps []ToolGroupCaps `json:"groupcaps"`
+							AttackCooldown float32
+							MaxDropLvl     int16
 
 							//mt:len32
-							DmgGroups []Group `json:"damage_groups"`
+							GroupCaps []ToolGroupCaps
 
-							AttackUses uint16 `json:"punch_attack_uses"`
+							//mt:len32
+							DmgGroups []Group
+
+							AttackUses uint16
 						}))(obj)).DmgGroups)[local378]).serialize(w)
 					}); err != nil {
 						if err == io.EOF {
@@ -34159,18 +34159,18 @@ func (obj *ToolCaps) serialize(w io.Writer) {
 				{
 					x := (*(*(struct {
 						//mt:if _ = %s; false
-						NonNil bool `json:"-"`
+						NonNil bool
 
-						AttackCooldown float32 `json:"full_punch_interval"`
-						MaxDropLvl     int16   `json:"max_drop_level"`
-
-						//mt:len32
-						GroupCaps []ToolGroupCaps `json:"groupcaps"`
+						AttackCooldown float32
+						MaxDropLvl     int16
 
 						//mt:len32
-						DmgGroups []Group `json:"damage_groups"`
+						GroupCaps []ToolGroupCaps
 
-						AttackUses uint16 `json:"punch_attack_uses"`
+						//mt:len32
+						DmgGroups []Group
+
+						AttackUses uint16
 					}))(obj)).AttackUses
 					write16(w, uint16(x))
 				}
@@ -34197,34 +34197,34 @@ func (obj *ToolCaps) serialize(w io.Writer) {
 func (obj *ToolCaps) deserialize(r io.Reader) {
 	if _ = (*(*(struct {
 		//mt:if _ = %s; false
-		NonNil bool `json:"-"`
+		NonNil bool
 
-		AttackCooldown float32 `json:"full_punch_interval"`
-		MaxDropLvl     int16   `json:"max_drop_level"`
-
-		//mt:len32
-		GroupCaps []ToolGroupCaps `json:"groupcaps"`
+		AttackCooldown float32
+		MaxDropLvl     int16
 
 		//mt:len32
-		DmgGroups []Group `json:"damage_groups"`
+		GroupCaps []ToolGroupCaps
 
-		AttackUses uint16 `json:"punch_attack_uses"`
+		//mt:len32
+		DmgGroups []Group
+
+		AttackUses uint16
 	}))(obj)); false {
 		{
 			p := &(*(*(struct {
 				//mt:if _ = %s; false
-				NonNil bool `json:"-"`
+				NonNil bool
 
-				AttackCooldown float32 `json:"full_punch_interval"`
-				MaxDropLvl     int16   `json:"max_drop_level"`
-
-				//mt:len32
-				GroupCaps []ToolGroupCaps `json:"groupcaps"`
+				AttackCooldown float32
+				MaxDropLvl     int16
 
 				//mt:len32
-				DmgGroups []Group `json:"damage_groups"`
+				GroupCaps []ToolGroupCaps
 
-				AttackUses uint16 `json:"punch_attack_uses"`
+				//mt:len32
+				DmgGroups []Group
+
+				AttackUses uint16
 			}))(obj)).NonNil
 			switch n := read8(r); n {
 			case 0:
@@ -34246,35 +34246,35 @@ func (obj *ToolCaps) deserialize(r io.Reader) {
 		if r.N > 0 {
 			(*(*(struct {
 				//mt:if _ = %s; false
-				NonNil bool `json:"-"`
+				NonNil bool
 
-				AttackCooldown float32 `json:"full_punch_interval"`
-				MaxDropLvl     int16   `json:"max_drop_level"`
-
-				//mt:len32
-				GroupCaps []ToolGroupCaps `json:"groupcaps"`
+				AttackCooldown float32
+				MaxDropLvl     int16
 
 				//mt:len32
-				DmgGroups []Group `json:"damage_groups"`
+				GroupCaps []ToolGroupCaps
 
-				AttackUses uint16 `json:"punch_attack_uses"`
+				//mt:len32
+				DmgGroups []Group
+
+				AttackUses uint16
 			}))(obj)).NonNil = true
 		} /**/
 		{
 			if (*(*(struct {
 				//mt:if _ = %s; false
-				NonNil bool `json:"-"`
+				NonNil bool
 
-				AttackCooldown float32 `json:"full_punch_interval"`
-				MaxDropLvl     int16   `json:"max_drop_level"`
-
-				//mt:len32
-				GroupCaps []ToolGroupCaps `json:"groupcaps"`
+				AttackCooldown float32
+				MaxDropLvl     int16
 
 				//mt:len32
-				DmgGroups []Group `json:"damage_groups"`
+				GroupCaps []ToolGroupCaps
 
-				AttackUses uint16 `json:"punch_attack_uses"`
+				//mt:len32
+				DmgGroups []Group
+
+				AttackUses uint16
 			}))(obj)).NonNil {
 				{
 					var local379 uint8
@@ -34289,36 +34289,36 @@ func (obj *ToolCaps) deserialize(r io.Reader) {
 				{
 					p := &(*(*(struct {
 						//mt:if _ = %s; false
-						NonNil bool `json:"-"`
+						NonNil bool
 
-						AttackCooldown float32 `json:"full_punch_interval"`
-						MaxDropLvl     int16   `json:"max_drop_level"`
-
-						//mt:len32
-						GroupCaps []ToolGroupCaps `json:"groupcaps"`
+						AttackCooldown float32
+						MaxDropLvl     int16
 
 						//mt:len32
-						DmgGroups []Group `json:"damage_groups"`
+						GroupCaps []ToolGroupCaps
 
-						AttackUses uint16 `json:"punch_attack_uses"`
+						//mt:len32
+						DmgGroups []Group
+
+						AttackUses uint16
 					}))(obj)).AttackCooldown
 					*p = math.Float32frombits(read32(r))
 				}
 				{
 					p := &(*(*(struct {
 						//mt:if _ = %s; false
-						NonNil bool `json:"-"`
+						NonNil bool
 
-						AttackCooldown float32 `json:"full_punch_interval"`
-						MaxDropLvl     int16   `json:"max_drop_level"`
-
-						//mt:len32
-						GroupCaps []ToolGroupCaps `json:"groupcaps"`
+						AttackCooldown float32
+						MaxDropLvl     int16
 
 						//mt:len32
-						DmgGroups []Group `json:"damage_groups"`
+						GroupCaps []ToolGroupCaps
 
-						AttackUses uint16 `json:"punch_attack_uses"`
+						//mt:len32
+						DmgGroups []Group
+
+						AttackUses uint16
 					}))(obj)).MaxDropLvl
 					*p = int16(read16(r))
 				}
@@ -34329,49 +34329,49 @@ func (obj *ToolCaps) deserialize(r io.Reader) {
 				}
 				((*(*(struct {
 					//mt:if _ = %s; false
-					NonNil bool `json:"-"`
+					NonNil bool
 
-					AttackCooldown float32 `json:"full_punch_interval"`
-					MaxDropLvl     int16   `json:"max_drop_level"`
-
-					//mt:len32
-					GroupCaps []ToolGroupCaps `json:"groupcaps"`
+					AttackCooldown float32
+					MaxDropLvl     int16
 
 					//mt:len32
-					DmgGroups []Group `json:"damage_groups"`
+					GroupCaps []ToolGroupCaps
 
-					AttackUses uint16 `json:"punch_attack_uses"`
+					//mt:len32
+					DmgGroups []Group
+
+					AttackUses uint16
 				}))(obj)).GroupCaps) = make([]ToolGroupCaps, local380)
 				for local381 := range (*(*(struct {
 					//mt:if _ = %s; false
-					NonNil bool `json:"-"`
+					NonNil bool
 
-					AttackCooldown float32 `json:"full_punch_interval"`
-					MaxDropLvl     int16   `json:"max_drop_level"`
-
-					//mt:len32
-					GroupCaps []ToolGroupCaps `json:"groupcaps"`
+					AttackCooldown float32
+					MaxDropLvl     int16
 
 					//mt:len32
-					DmgGroups []Group `json:"damage_groups"`
+					GroupCaps []ToolGroupCaps
 
-					AttackUses uint16 `json:"punch_attack_uses"`
+					//mt:len32
+					DmgGroups []Group
+
+					AttackUses uint16
 				}))(obj)).GroupCaps {
 					if err := pcall(func() {
 						(((*(*(struct {
 							//mt:if _ = %s; false
-							NonNil bool `json:"-"`
+							NonNil bool
 
-							AttackCooldown float32 `json:"full_punch_interval"`
-							MaxDropLvl     int16   `json:"max_drop_level"`
-
-							//mt:len32
-							GroupCaps []ToolGroupCaps `json:"groupcaps"`
+							AttackCooldown float32
+							MaxDropLvl     int16
 
 							//mt:len32
-							DmgGroups []Group `json:"damage_groups"`
+							GroupCaps []ToolGroupCaps
 
-							AttackUses uint16 `json:"punch_attack_uses"`
+							//mt:len32
+							DmgGroups []Group
+
+							AttackUses uint16
 						}))(obj)).GroupCaps)[local381]).deserialize(r)
 					}); err != nil {
 						if err == io.EOF {
@@ -34387,49 +34387,49 @@ func (obj *ToolCaps) deserialize(r io.Reader) {
 				}
 				((*(*(struct {
 					//mt:if _ = %s; false
-					NonNil bool `json:"-"`
+					NonNil bool
 
-					AttackCooldown float32 `json:"full_punch_interval"`
-					MaxDropLvl     int16   `json:"max_drop_level"`
-
-					//mt:len32
-					GroupCaps []ToolGroupCaps `json:"groupcaps"`
+					AttackCooldown float32
+					MaxDropLvl     int16
 
 					//mt:len32
-					DmgGroups []Group `json:"damage_groups"`
+					GroupCaps []ToolGroupCaps
 
-					AttackUses uint16 `json:"punch_attack_uses"`
+					//mt:len32
+					DmgGroups []Group
+
+					AttackUses uint16
 				}))(obj)).DmgGroups) = make([]Group, local382)
 				for local383 := range (*(*(struct {
 					//mt:if _ = %s; false
-					NonNil bool `json:"-"`
+					NonNil bool
 
-					AttackCooldown float32 `json:"full_punch_interval"`
-					MaxDropLvl     int16   `json:"max_drop_level"`
-
-					//mt:len32
-					GroupCaps []ToolGroupCaps `json:"groupcaps"`
+					AttackCooldown float32
+					MaxDropLvl     int16
 
 					//mt:len32
-					DmgGroups []Group `json:"damage_groups"`
+					GroupCaps []ToolGroupCaps
 
-					AttackUses uint16 `json:"punch_attack_uses"`
+					//mt:len32
+					DmgGroups []Group
+
+					AttackUses uint16
 				}))(obj)).DmgGroups {
 					if err := pcall(func() {
 						(((*(*(struct {
 							//mt:if _ = %s; false
-							NonNil bool `json:"-"`
+							NonNil bool
 
-							AttackCooldown float32 `json:"full_punch_interval"`
-							MaxDropLvl     int16   `json:"max_drop_level"`
-
-							//mt:len32
-							GroupCaps []ToolGroupCaps `json:"groupcaps"`
+							AttackCooldown float32
+							MaxDropLvl     int16
 
 							//mt:len32
-							DmgGroups []Group `json:"damage_groups"`
+							GroupCaps []ToolGroupCaps
 
-							AttackUses uint16 `json:"punch_attack_uses"`
+							//mt:len32
+							DmgGroups []Group
+
+							AttackUses uint16
 						}))(obj)).DmgGroups)[local383]).deserialize(r)
 					}); err != nil {
 						if err == io.EOF {
@@ -34441,18 +34441,18 @@ func (obj *ToolCaps) deserialize(r io.Reader) {
 				{
 					p := &(*(*(struct {
 						//mt:if _ = %s; false
-						NonNil bool `json:"-"`
+						NonNil bool
 
-						AttackCooldown float32 `json:"full_punch_interval"`
-						MaxDropLvl     int16   `json:"max_drop_level"`
-
-						//mt:len32
-						GroupCaps []ToolGroupCaps `json:"groupcaps"`
+						AttackCooldown float32
+						MaxDropLvl     int16
 
 						//mt:len32
-						DmgGroups []Group `json:"damage_groups"`
+						GroupCaps []ToolGroupCaps
 
-						AttackUses uint16 `json:"punch_attack_uses"`
+						//mt:len32
+						DmgGroups []Group
+
+						AttackUses uint16
 					}))(obj)).AttackUses
 					*p = read16(r)
 				}

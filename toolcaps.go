@@ -2,7 +2,7 @@ package mt
 
 type ToolCaps struct {
 	//mt:if _ = %s; false
-	NonNil bool `json:"-"`
+	NonNil bool
 	//mt:end
 
 	//mt:lenhdr 16
@@ -11,18 +11,19 @@ type ToolCaps struct {
 	//mt:if r.N > 0 { %s.NonNil = true}; /**/
 	//mt:if %s.NonNil
 
+	// Version.
 	//mt:const uint8(5)
 
-	AttackCooldown float32 `json:"full_punch_interval"`
-	MaxDropLvl     int16   `json:"max_drop_level"`
+	AttackCooldown float32
+	MaxDropLvl     int16
 
 	//mt:len32
-	GroupCaps []ToolGroupCaps `json:"groupcaps"`
+	GroupCaps []ToolGroupCaps
 
 	//mt:len32
-	DmgGroups []Group `json:"damage_groups"`
+	DmgGroups []Group
 
-	AttackUses uint16 `json:"punch_attack_uses"`
+	AttackUses uint16
 
 	//mt:end
 	//mt:end
