@@ -520,6 +520,7 @@ var typeNames = []string{
 	"ToCltStarParams",
 	"ToCltSRPBytesSaltB",
 	"ToCltFormspecPrepend",
+	"ToCltMinimapModes",
 
 	"AOCmdProps",
 	"AOCmdPos",
