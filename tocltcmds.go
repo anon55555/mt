@@ -731,35 +731,31 @@ type ToCltMinimapModes struct {
 	Modes   []MinimapMode
 }
 
-func (cmd *ToCltMinimapModes) serialize(w io.Writer) error {
+var _ serializer = (*ToCltMinimapModes)(nil)
+
+func (cmd *ToCltMinimapModes) serialize(w io.Writer) {
 	buf := make([]byte, 4)
 	if len(cmd.Modes) > math.MaxUint16 {
-		return ErrTooLong
+		chk(ErrTooLong)
 	}
 	be.PutUint16(buf[0:2], uint16(len(cmd.Modes)))
 	be.PutUint16(buf[2:4], cmd.Current)
-	if _, err := w.Write(buf); err != nil {
-		return err
-	}
+	_, err := w.Write(buf)
+	chk(err)
 	for i := range cmd.Modes {
-		if err := serialize(w, &cmd.Modes[i]); err != nil {
-			return err
-		}
+		chk(serialize(w, &cmd.Modes[i]))
 	}
-	return nil
 }
 
-func (cmd *ToCltMinimapModes) deserialize(r io.Reader) error {
+var _ deserializer = (*ToCltMinimapModes)(nil)
+
+func (cmd *ToCltMinimapModes) deserialize(r io.Reader) {
 	buf := make([]byte, 4)
-	if _, err := io.ReadFull(r, buf); err != nil {
-		return err
-	}
+	_, err := io.ReadFull(r, buf)
+	chk(err)
 	cmd.Modes = make([]MinimapMode, be.Uint16(buf[0:2]))
 	cmd.Current = be.Uint16(buf[2:4])
 	for i := range cmd.Modes {
-		if err := deserialize(r, &cmd.Modes[i]); err != nil {
-			return err
-		}
+		chk(deserialize(r, &cmd.Modes[i]))
 	}
-	return nil
 }
