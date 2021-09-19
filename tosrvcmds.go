@@ -1,5 +1,7 @@
 package mt
 
+import "github.com/anon55555/mt/rudp"
+
 type ToSrvCmd interface {
 	Cmd
 	toSrvCmdNo() uint16
@@ -35,12 +37,12 @@ type ToSrvJoinModChan struct {
 	Channel string
 }
 
-// ToSrvJoinModChan attempts to leave a mod channel.
+// ToSrvLeaveModChan attempts to leave a mod channel.
 type ToSrvLeaveModChan struct {
 	Channel string
 }
 
-// ToSrvJoinModChan sends a message on a mod channel.
+// ToSrvMsgModChan sends a message on a mod channel.
 type ToSrvMsgModChan struct {
 	Channel string
 	Msg     string
@@ -155,3 +157,9 @@ type ToSrvSRPBytesA struct {
 type ToSrvSRPBytesM struct {
 	M []byte
 }
+
+type ToSrvDisco struct{}
+
+func (*ToSrvDisco) cmd()                         {}
+func (*ToSrvDisco) toSrvCmdNo() uint16           { return 0xffff }
+func (*ToSrvDisco) DefaultPktInfo() rudp.PktInfo { return rudp.PktInfo{} }

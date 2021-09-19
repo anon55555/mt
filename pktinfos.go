@@ -8,7 +8,7 @@ func (*ToCltHello) DefaultPktInfo() rudp.PktInfo                 { return rudp.P
 func (*ToCltAcceptAuth) DefaultPktInfo() rudp.PktInfo            { return rudp.PktInfo{0, false} }
 func (*ToCltAcceptSudoMode) DefaultPktInfo() rudp.PktInfo        { return rudp.PktInfo{0, false} }
 func (*ToCltDenySudoMode) DefaultPktInfo() rudp.PktInfo          { return rudp.PktInfo{0, false} }
-func (*ToCltDisco) DefaultPktInfo() rudp.PktInfo                 { return rudp.PktInfo{0, false} }
+func (*ToCltKick) DefaultPktInfo() rudp.PktInfo                  { return rudp.PktInfo{0, false} }
 func (*ToCltBlkData) DefaultPktInfo() rudp.PktInfo               { return rudp.PktInfo{2, false} }
 func (*ToCltAddNode) DefaultPktInfo() rudp.PktInfo               { return rudp.PktInfo{0, false} }
 func (*ToCltRemoveNode) DefaultPktInfo() rudp.PktInfo            { return rudp.PktInfo{0, false} }
@@ -22,7 +22,7 @@ func (*ToCltAORmAdd) DefaultPktInfo() rudp.PktInfo               { return rudp.P
 func (*ToCltAOMsgs) DefaultPktInfo() rudp.PktInfo                { return rudp.PktInfo{0, false} }
 func (*ToCltHP) DefaultPktInfo() rudp.PktInfo                    { return rudp.PktInfo{0, false} }
 func (*ToCltMovePlayer) DefaultPktInfo() rudp.PktInfo            { return rudp.PktInfo{0, false} }
-func (*ToCltDiscoLegacy) DefaultPktInfo() rudp.PktInfo           { return rudp.PktInfo{0, false} }
+func (*ToCltLegacyKick) DefaultPktInfo() rudp.PktInfo            { return rudp.PktInfo{0, false} }
 func (*ToCltFOV) DefaultPktInfo() rudp.PktInfo                   { return rudp.PktInfo{0, false} }
 func (*ToCltDeathScreen) DefaultPktInfo() rudp.PktInfo           { return rudp.PktInfo{0, false} }
 func (*ToCltMedia) DefaultPktInfo() rudp.PktInfo                 { return rudp.PktInfo{2, false} }

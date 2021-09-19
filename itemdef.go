@@ -52,7 +52,5 @@ type ItemDef struct {
 
 	ShortDesc string
 
-	PlaceParam2 byte
-
 	//mt:end
 }

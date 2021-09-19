@@ -51,9 +51,7 @@ map[uint16]*NodeMeta	{
 			write8(w, 0)
 		} else {
 			write8(w, 2)
-			if len(x) > math.MaxUint16 {
-				chk(ErrTooLong)
-			}
+			// len(map[uint16]...) always < math.MaxUint16
 			write16(w, uint16(len(x)))
 			keys := make([]uint16, 0, len(x))
 			for key := range x {

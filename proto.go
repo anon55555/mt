@@ -8,8 +8,6 @@ import (
 	"github.com/anon55555/mt/rudp"
 )
 
-const ChannelCount = rudp.ChannelCount
-
 // A Pkt is a deserialized rudp.Pkt.
 type Pkt struct {
 	Cmd
@@ -27,6 +25,10 @@ func (p Peer) Send(pkt Pkt) (ack <-chan struct{}, err error) {
 		cmdNo = pkt.Cmd.(ToSrvCmd).toSrvCmdNo()
 	} else {
 		cmdNo = pkt.Cmd.(ToCltCmd).toCltCmdNo()
+	}
+
+	if cmdNo == 0xffff {
+		return nil, p.Close()
 	}
 
 	r, w := io.Pipe()
@@ -78,7 +80,7 @@ func (p Peer) Recv() (_ Pkt, rerr error) {
 
 	extra, err := io.ReadAll(pkt)
 	if len(extra) > 0 {
-		err = rudp.TrailingDataError(extra)
+		err = fmt.Errorf("%T: %w", cmd, rudp.TrailingDataError(extra))
 	}
 	return Pkt{cmd, pkt.PktInfo}, err
 }

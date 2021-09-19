@@ -2,7 +2,7 @@ ToCltHello	0	rel
 ToCltAcceptAuth	0	rel
 ToCltAcceptSudoMode	0	rel
 ToCltDenySudoMode	0	rel
-ToCltDisco	0	rel
+ToCltKick	0	rel
 ToCltBlkData	2	rel
 ToCltAddNode	0	rel
 ToCltRemoveNode	0	rel
@@ -16,7 +16,7 @@ ToCltAORmAdd	0	rel
 ToCltAOMsgs	0	rel
 ToCltHP	0	rel
 ToCltMovePlayer	0	rel
-ToCltDiscoLegacy	0	rel
+ToCltLegacyKick	0	rel
 ToCltFOV	0	rel
 ToCltDeathScreen	0	rel
 ToCltMedia	2	rel

@@ -99,7 +99,7 @@ PointedThing	{
 []AOMsg	{ // For AOInitData.Msgs.
 		*p = make([]AOMsg, read8(r))
 		for i := range *p {
-			r := &io.LimitedReader{r, int64(read32(r))}
+			r := &io.LimitedReader{R: r, N: int64(read32(r))}
 			msg, err := readAOMsg(r)
 			chk(err)
 			(*p)[i] = msg
@@ -111,7 +111,7 @@ PointedThing	{
 
 []NodeDef	{ // For ToCltNodeDefs.Defs.
 		*p = make([]NodeDef, read16(r))
-		r := &io.LimitedReader{r, int64(read32(r))}
+		r := &io.LimitedReader{R: r, N: int64(read32(r))}
 		for i := range *p {
 			(*p)[i].deserialize(r)
 		}

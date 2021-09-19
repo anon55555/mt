@@ -1,6 +1,9 @@
 package mt
 
-import "strings"
+import (
+	"encoding/json"
+	"strings"
+)
 
 type ItemMeta string
 
@@ -70,4 +73,26 @@ func (m *ItemMeta) SetField(name, value string) {
 	}
 	fields = append(fields, Field{name, value})
 	*m = NewItemMeta(fields)
+}
+
+func (m ItemMeta) ToolCaps() (ToolCaps, bool) {
+	f, ok := m.Field("tool_capabilities")
+	if !ok {
+		return ToolCaps{}, false
+	}
+
+	var tc ToolCaps
+	if err := json.Unmarshal([]byte(f), &tc); err != nil {
+		return tc, false
+	}
+	return tc, true
+}
+
+func (m *ItemMeta) SetToolCaps(tc ToolCaps) {
+	b, err := tc.MarshalJSON()
+	if err != nil {
+		panic(err)
+	}
+
+	m.SetField("tool_capabilities", string(b))
 }

@@ -2,7 +2,7 @@
 3	AcceptAuth
 4	AcceptSudoMode
 5	DenySudoMode
-10	Disco
+10	Kick
 32	BlkData
 33	AddNode
 34	RemoveNode
@@ -16,7 +16,7 @@
 50	AOMsgs
 51	HP
 52	MovePlayer
-53	DiscoLegacy
+53	LegacyKick
 54	FOV
 55	DeathScreen
 56	Media

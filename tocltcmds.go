@@ -6,6 +6,8 @@ import (
 	"image/color"
 	"io"
 	"math"
+
+	"github.com/anon55555/mt/rudp"
 )
 
 type ToCltCmd interface {
@@ -38,14 +40,17 @@ type ToCltAcceptAuth struct {
 	SudoAuthMethods AuthMethods
 }
 
-type ToCltAcceptSudoMode struct{}
+type ToCltAcceptSudoMode struct {
+	SudoAuthMethods AuthMethods
+	//mt:const [15]byte{}
+}
 
 type ToCltDenySudoMode struct{}
 
-// ToCltDisco tells that the client that it has been disconnected by the server.
-type ToCltDisco struct {
-	Reason DiscoReason
-	//mt:assert %s.Reason < maxDiscoReason
+// ToCltKick tells that the client that it has been kicked by the server.
+type ToCltKick struct {
+	Reason KickReason
+	//mt:assert %s.Reason < maxKickReason
 
 	//mt:if dr := %s.Reason; dr == Custom || dr == Shutdown || dr == Crash
 	Custom string
@@ -56,10 +61,11 @@ type ToCltDisco struct {
 	//mt:end
 }
 
-type DiscoReason uint8
+// A KickReason is the reason a ToCltKick has been sent.
+type KickReason uint8
 
 const (
-	WrongPasswd DiscoReason = iota
+	WrongPasswd KickReason = iota
 	UnexpectedData
 	SrvIsSingleplayer
 	UnsupportedVer
@@ -72,10 +78,10 @@ const (
 	Custom
 	Shutdown
 	Crash
-	maxDiscoReason
+	maxKickReason
 )
 
-func (cmd ToCltDisco) String() (msg string) {
+func (cmd ToCltKick) String() (msg string) {
 	switch cmd.Reason {
 	case WrongPasswd:
 		return "wrong password"
@@ -104,7 +110,7 @@ func (cmd ToCltDisco) String() (msg string) {
 	case Crash:
 		msg = "server crash"
 	default:
-		msg = fmt.Sprintf("DiscoReason(%d)", cmd.Reason)
+		msg = fmt.Sprintf("KickReason(%d)", cmd.Reason)
 	}
 
 	if cmd.Custom != "" {
@@ -209,13 +215,15 @@ const (
 // the AOs that it can see.
 type ToCltAORmAdd struct {
 	Remove []AOID
-	Add    []struct {
-		ID AOID
-		//mt:const genericCAO
-		//mt:lenhdr 32
-		InitData AOInitData
-		//mt:end
-	}
+	Add    []AOAdd
+}
+
+type AOAdd struct {
+	ID AOID
+	//mt:const genericCAO
+	//mt:lenhdr 32
+	InitData AOInitData
+	//mt:end
 }
 
 // ToCltAOMsgs updates the client about nearby AOs.
@@ -235,7 +243,7 @@ type ToCltMovePlayer struct {
 	Pitch, Yaw float32
 }
 
-type ToCltDiscoLegacy struct {
+type ToCltLegacyKick struct {
 	//mt:utf16
 	Reason string
 }
@@ -409,12 +417,7 @@ type ToCltAddParticleSpawner struct {
 	NodeTile     uint8
 }
 
-type HUDID uint32
-
-// ToCltHUDAdd tells the client to add a HUD.
-type ToCltAddHUD struct {
-	ID HUDID
-
+type HUD struct {
 	Type HUDType
 
 	Pos      [2]float32
@@ -430,6 +433,14 @@ type ToCltAddHUD struct {
 	Size     [2]int32
 	ZIndex   int16
 	Text2    string
+}
+
+type HUDID uint32
+
+// ToCltHUDAdd tells the client to add a HUD.
+type ToCltAddHUD struct {
+	ID HUDID
+	HUD
 }
 
 type HUDType uint8
@@ -503,7 +514,7 @@ type ToCltChangeHUD struct {
 	//mt:end
 
 	//mt:if %s.Field == HUDZIndex
-	ZIndex uint32
+	ZIndex int32
 	//mt:end
 
 	//mt:if %s.Field == HUDText2
@@ -759,3 +770,9 @@ func (cmd *ToCltMinimapModes) deserialize(r io.Reader) {
 		chk(deserialize(r, &cmd.Modes[i]))
 	}
 }
+
+type ToCltDisco struct{}
+
+func (*ToCltDisco) cmd()                         {}
+func (*ToCltDisco) toCltCmdNo() uint16           { return 0xffff }
+func (*ToCltDisco) DefaultPktInfo() rudp.PktInfo { return rudp.PktInfo{} }

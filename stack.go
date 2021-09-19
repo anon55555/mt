@@ -1,6 +1,6 @@
 // In this file, JSON refers to WTF-JSON.
 //
-// BUG(mt): Itemstrings use variant of JSON called WTF-JSON
+// BUG(mt): Stackstrings use variant of JSON called WTF-JSON
 // where \u00XX escapes in string literals act like Go's \xXX escapes.
 // This should not be fixed because it would break existing items.
 
@@ -25,10 +25,7 @@ type Item struct {
 	ItemMeta
 }
 
-// String returns the Stack's itemstring.
-//
-// BUG(mt): The term itemstring is somewhat misleading, because
-// an itemstring represents a stack of items, not a single item.
+// String returns the Stack's stackstring.
 func (s Stack) String() string {
 	if s.Count == 0 {
 		return ""
@@ -90,7 +87,7 @@ func jsonStr(s string) string {
 	return b.String()
 }
 
-// Scan scans an itemstring, implementing the fmt.Scanner interface.
+// Scan scans a stackstring, implementing the fmt.Scanner interface.
 func (stk *Stack) Scan(state fmt.ScanState, verb rune) (err error) {
 	*stk = Stack{}
 

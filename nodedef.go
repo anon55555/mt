@@ -158,3 +158,27 @@ type NodeDef struct {
 
 	//mt:end
 }
+
+func BuiltinNodeDefs(n int) map[Content]NodeDef {
+	defs := make(map[Content]NodeDef, 3+n)
+	defs[Unknown] = NodeDef{
+		Name: "unknown",
+	}
+	defs[Air] = NodeDef{
+		Name:        "air",
+		DrawType:    DrawNothing,
+		P1Type:      P1Light,
+		Translucent: true,
+		Transparent: true,
+		Replaceable: true,
+		Floodable:   true,
+		GndContent:  true,
+	}
+	defs[Ignore] = NodeDef{
+		Name:        "ignore",
+		DrawType:    DrawNothing,
+		Replaceable: true,
+		GndContent:  true,
+	}
+	return defs
+}

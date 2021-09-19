@@ -6,7 +6,7 @@ func (*ToCltHello) cmd()                 {}
 func (*ToCltAcceptAuth) cmd()            {}
 func (*ToCltAcceptSudoMode) cmd()        {}
 func (*ToCltDenySudoMode) cmd()          {}
-func (*ToCltDisco) cmd()                 {}
+func (*ToCltKick) cmd()                  {}
 func (*ToCltBlkData) cmd()               {}
 func (*ToCltAddNode) cmd()               {}
 func (*ToCltRemoveNode) cmd()            {}
@@ -20,7 +20,7 @@ func (*ToCltAORmAdd) cmd()               {}
 func (*ToCltAOMsgs) cmd()                {}
 func (*ToCltHP) cmd()                    {}
 func (*ToCltMovePlayer) cmd()            {}
-func (*ToCltDiscoLegacy) cmd()           {}
+func (*ToCltLegacyKick) cmd()            {}
 func (*ToCltFOV) cmd()                   {}
 func (*ToCltDeathScreen) cmd()           {}
 func (*ToCltMedia) cmd()                 {}

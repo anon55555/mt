@@ -6,7 +6,7 @@ func (*ToCltHello) toCltCmdNo() uint16                 { return 2 }
 func (*ToCltAcceptAuth) toCltCmdNo() uint16            { return 3 }
 func (*ToCltAcceptSudoMode) toCltCmdNo() uint16        { return 4 }
 func (*ToCltDenySudoMode) toCltCmdNo() uint16          { return 5 }
-func (*ToCltDisco) toCltCmdNo() uint16                 { return 10 }
+func (*ToCltKick) toCltCmdNo() uint16                  { return 10 }
 func (*ToCltBlkData) toCltCmdNo() uint16               { return 32 }
 func (*ToCltAddNode) toCltCmdNo() uint16               { return 33 }
 func (*ToCltRemoveNode) toCltCmdNo() uint16            { return 34 }
@@ -20,7 +20,7 @@ func (*ToCltAORmAdd) toCltCmdNo() uint16               { return 49 }
 func (*ToCltAOMsgs) toCltCmdNo() uint16                { return 50 }
 func (*ToCltHP) toCltCmdNo() uint16                    { return 51 }
 func (*ToCltMovePlayer) toCltCmdNo() uint16            { return 52 }
-func (*ToCltDiscoLegacy) toCltCmdNo() uint16           { return 53 }
+func (*ToCltLegacyKick) toCltCmdNo() uint16            { return 53 }
 func (*ToCltFOV) toCltCmdNo() uint16                   { return 54 }
 func (*ToCltDeathScreen) toCltCmdNo() uint16           { return 55 }
 func (*ToCltMedia) toCltCmdNo() uint16                 { return 56 }
@@ -65,7 +65,7 @@ var newToCltCmd = map[uint16]func() Cmd{
 	3:  func() Cmd { return new(ToCltAcceptAuth) },
 	4:  func() Cmd { return new(ToCltAcceptSudoMode) },
 	5:  func() Cmd { return new(ToCltDenySudoMode) },
-	10: func() Cmd { return new(ToCltDisco) },
+	10: func() Cmd { return new(ToCltKick) },
 	32: func() Cmd { return new(ToCltBlkData) },
 	33: func() Cmd { return new(ToCltAddNode) },
 	34: func() Cmd { return new(ToCltRemoveNode) },
@@ -79,7 +79,7 @@ var newToCltCmd = map[uint16]func() Cmd{
 	50: func() Cmd { return new(ToCltAOMsgs) },
 	51: func() Cmd { return new(ToCltHP) },
 	52: func() Cmd { return new(ToCltMovePlayer) },
-	53: func() Cmd { return new(ToCltDiscoLegacy) },
+	53: func() Cmd { return new(ToCltLegacyKick) },
 	54: func() Cmd { return new(ToCltFOV) },
 	55: func() Cmd { return new(ToCltDeathScreen) },
 	56: func() Cmd { return new(ToCltMedia) },

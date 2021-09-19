@@ -1,6 +1,5 @@
 // Package mt implements the high-level Minetest protocol.
-// This version is compatible with
-// https://github.com/ClamityAnarchy/minetest/commit/66adeade9d5c45a5499b5ad1ad4bd91dae82482a.
+// This version is compatible with Minetest 5.4.1.
 package mt
 
 type Node struct {

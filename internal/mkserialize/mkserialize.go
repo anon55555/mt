@@ -50,9 +50,11 @@ func structPragma(c *ast.Comment, sp *[]func(), expr string, de bool) {
 			fmt.Println("{")
 			x := newVar()
 			fmt.Println("var", x, typeStr(tv.Type))
+			y := newVar()
+			fmt.Println(y, ":=", arg)
 			genSerialize(tv.Type, x, token.NoPos, nil, de)
-			fmt.Println("if", x, "!=", "(", tv.Value, ")",
-				`{ chk(fmt.Errorf("const %v: %v",`, tv.Value, ",", x, ")) }")
+			fmt.Println("if", x, "!=", y,
+				`{ chk(fmt.Errorf("const %v: %v",`, strconv.Quote(arg), ",", x, ")) }")
 			fmt.Println("}")
 		} else {
 			v := newVar()
@@ -96,7 +98,7 @@ func structPragma(c *ast.Comment, sp *[]func(), expr string, de bool) {
 			if arg == "64" {
 				fmt.Println(`if n > math.MaxInt64 { panic("too big len") }`)
 			}
-			fmt.Println("r := &io.LimitedReader{r, int64(n)}")
+			fmt.Println("r := &io.LimitedReader{R: r, N: int64(n)}")
 		} else {
 			switch arg {
 			case "8", "32":
@@ -143,6 +145,28 @@ func genSerialize(t types.Type, expr string, pos token.Pos, doc *ast.CommentGrou
 		for _, c := range doc.List {
 			pragma := true
 			switch c.Text {
+			case "//mt:32to16":
+				t = types.Typ[types.Int16]
+				if de {
+					v := newVar()
+					fmt.Println("var", v, "int16")
+					defer fmt.Println(expr + " = int32(" + v + ")")
+					expr = v
+				} else {
+					expr = "int16(" + expr + ")"
+				}
+				pos = token.NoPos
+			case "//mt:32tou16":
+				t = types.Typ[types.Uint16]
+				if de {
+					v := newVar()
+					fmt.Println("var", v, "uint16")
+					defer fmt.Println(expr + " = int32(" + v + ")")
+					expr = v
+				} else {
+					expr = "uint16(" + expr + ")"
+				}
+				pos = token.NoPos
 			case "//mt:utf16":
 				t = types.NewSlice(types.Typ[types.Uint16])
 				if de {
@@ -151,7 +175,9 @@ func genSerialize(t types.Type, expr string, pos token.Pos, doc *ast.CommentGrou
 					defer fmt.Println(expr + " = string(utf16.Decode(" + v + "))")
 					expr = v
 				} else {
-					expr = "utf16.Encode([]rune(" + expr + "))"
+					v := newVar()
+					fmt.Println(v, ":= utf16.Encode([]rune("+expr+"))")
+					expr = v
 				}
 				pos = token.NoPos
 			case "//mt:raw":
@@ -298,6 +324,15 @@ func genSerialize(t types.Type, expr string, pos token.Pos, doc *ast.CommentGrou
 					expr, typeStr(t), v)
 				genSerialize(types.NewArray(t.Elem(), 0), expr, pos, nil, de)
 			} else {
+				if b, ok := t.Elem().(*types.Basic); ok && b.Kind() == types.Byte {
+					fmt.Println("{")
+					fmt.Println("var err error")
+					fmt.Println(expr, ", err = io.ReadAll(r)")
+					fmt.Println("chk(err)")
+					fmt.Println("}")
+					return
+				}
+
 				fmt.Println("for {")
 				v := newVar()
 				fmt.Println("var", v, typeStr(t.Elem()))
@@ -468,7 +503,7 @@ var typeNames = []string{
 	"ToCltAcceptAuth",
 	"ToCltAcceptSudoMode",
 	"ToCltDenySudoMode",
-	"ToCltDisco",
+	"ToCltKick",
 	"ToCltBlkData",
 	"ToCltAddNode",
 	"ToCltRemoveNode",
@@ -482,7 +517,7 @@ var typeNames = []string{
 	"ToCltAOMsgs",
 	"ToCltHP",
 	"ToCltMovePlayer",
-	"ToCltDiscoLegacy",
+	"ToCltLegacyKick",
 	"ToCltFOV",
 	"ToCltDeathScreen",
 	"ToCltMedia",

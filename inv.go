@@ -30,13 +30,18 @@ func (i Inv) SerializeKeep(w io.Writer, old Inv) error {
 	ew := &errWriter{w: w}
 
 	for _, l := range i {
-		if reflect.DeepEqual(&i, old.List(l.Name)) {
+		var oldList InvList
+		if l := old.List(l.Name); l != nil {
+			oldList = l.InvList
+		}
+
+		if reflect.DeepEqual(&i, oldList) {
 			fmt.Fprintln(ew, "KeepList", l.Name)
 			continue
 		}
 
 		fmt.Fprintln(ew, "List", l.Name, len(l.Stacks))
-		l.Serialize(ew)
+		l.SerializeKeep(ew, oldList)
 	}
 	fmt.Fprintln(ew, "EndInventory")
 
@@ -44,7 +49,7 @@ func (i Inv) SerializeKeep(w io.Writer, old Inv) error {
 }
 
 func (i *Inv) Deserialize(r io.Reader) (err error) {
-	s := new(sentinal)
+	s := new(sentinel)
 	defer s.recover(&err)
 
 	old := *i
@@ -103,6 +108,7 @@ func (l InvList) SerializeKeep(w io.Writer, old InvList) error {
 	for i, s := range l.Stacks {
 		if i < len(old.Stacks) && s == old.Stacks[i] {
 			fmt.Fprintln(ew, "Keep")
+			continue
 		}
 
 		if s.Count > 0 {
@@ -117,7 +123,7 @@ func (l InvList) SerializeKeep(w io.Writer, old InvList) error {
 }
 
 func (l *InvList) Deserialize(r io.Reader) (err error) {
-	s := new(sentinal)
+	s := new(sentinel)
 	defer s.recover(&err)
 
 	if _, err := fmt.Fscanf(r, "Width %d\n", &l.Width); err != nil {
@@ -186,16 +192,16 @@ func readCmdLn(r io.Reader, cmds map[string]interface{}) error {
 	return nil
 }
 
-type sentinal struct {
+type sentinel struct {
 	err error
 }
 
-func (s *sentinal) ret(err error) {
+func (s *sentinel) ret(err error) {
 	s.err = err
 	panic(s)
 }
 
-func (s *sentinal) recover(p *error) {
+func (s *sentinel) recover(p *error) {
 	if r := recover(); r != nil {
 		if r == s {
 			*p = s.err

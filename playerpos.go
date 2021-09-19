@@ -72,3 +72,7 @@ func (p PlayerPos) FOV() float32 {
 func (p *PlayerPos) SetFOV(fov float32) {
 	p.FOV80 = uint8(fov * 80)
 }
+
+func (p PlayerPos) StoodOn() [3]int16 {
+	return p.Pos().Sub(Vec{1: 5}).Int()
+}
